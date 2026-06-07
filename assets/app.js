@@ -210,8 +210,8 @@ let weddingConfig = {
 let supabaseClient = null;
 
 function initSupabase() {
-  const url = localStorage.getItem('supabase_url') || 'https://fmgotefjeiuemkbhgjbt.supabase.co';
-  const key = localStorage.getItem('supabase_key') || 'sb_publishable_kSO_uZOk7izW5aBNM-OrjQ_MTr_f2Y4';
+  const url = localStorage.getItem('supabase_url') || 'https://hurwjwdpyvysidjqhddh.supabase.co';
+  const key = localStorage.getItem('supabase_key') || 'sb_publishable_flQeRhAxjOo1bo5euxu6Sg_aroQrhu_';
   if (url && key && typeof supabase !== 'undefined') {
     try {
       supabaseClient = supabase.createClient(url, key);
@@ -2072,6 +2072,7 @@ function setViewport(mode) {
     viewport.content = 'width=device-width, initial-scale=1.0';
   }
 }
+
 
 
 
