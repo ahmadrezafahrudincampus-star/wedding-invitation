@@ -1,0 +1,1444 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500;600&family=Great+Vibes&family=Cinzel:wght@400;600;700&display=swap');
+
+:root {
+  --color-primary: #C9A96E;       /* Gold Accent */
+  --color-primary-hover: #B5955C;
+  --color-bg-cream: #FAF7F2;      /* Light Cream */
+  --color-text-dark: #2C3E2B;     /* Sage Dark Green-Gray */
+  --color-text-muted: #5A6E59;    /* Light Sage */
+  --color-card-bg: rgba(255, 255, 255, 0.9);
+  
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-script: 'Great Vibes', cursive;
+  --font-cinzel: 'Cinzel', serif;
+
+  --groom-bride-size-cover: 64px;
+  --groom-bride-size-body: 38px;
+  --floral-corner-size: 200px;
+  --floral-divider-size: 180px;
+  
+  /* Customizable variables */
+  --color-font-names: #C9A96E;
+  --color-font-headings: #C9A96E;
+  --color-font-body: #2C3E2B;
+  --font-size-headings: 40px;
+  --font-size-body: 13px;
+  --avatar-size: 130px;
+  
+  --color-hero-title: #2c3e2b;
+  --font-size-hero-title: 12px;
+  
+  /* Spacing and Shadow variables */
+  --text-shadow-blur: 0px;
+  --color-text-shadow: rgba(0,0,0,0.15);
+  --headings-letter-spacing: 0px;
+  --body-letter-spacing: 0px;
+  --body-line-height: 1.5;
+  
+  --names-line-height: 1.3;
+  --names-stroke-width: 0px;
+  --names-stroke-color: #000000;
+  
+  --headings-stroke-width: 0px;
+  --headings-stroke-color: #000000;
+  
+  --body-stroke-width: 0px;
+  --body-stroke-color: #000000;
+  
+  --cover-title-stroke-width: 0px;
+  --cover-title-stroke-color: #000000;
+  
+  --hero-title-stroke-width: 0px;
+  --hero-title-stroke-color: #000000;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg-cream);
+  color: var(--color-text-dark);
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-cream);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 3px;
+}
+
+/* Background Watercolor & Ornaments */
+.wedding-bg {
+  background-image: url('watercolor_bg.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Floral Corner Accents */
+.floral-corner {
+  position: absolute;
+  width: var(--floral-corner-size, 250px);
+  height: var(--floral-corner-size, 250px);
+  pointer-events: none;
+  z-index: 1;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.floral-top-right {
+  top: 0;
+  right: 0;
+  background-image: url('floral_top_right.png');
+  background-position: top right;
+}
+.floral-bottom-left {
+  bottom: 0;
+  left: 0;
+  background-image: url('floral_bottom_left.png');
+  background-position: bottom left;
+}
+
+/* Cover Section Curtain Transition */
+.curtain-cover {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 999;
+  background-image: url('watercolor_bg.png');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 1.2s cubic-bezier(0.85, 0, 0.15, 1);
+  overflow: hidden;
+}
+
+.curtain-cover.opened {
+  transform: translateY(-100%);
+}
+
+/* Ensure cover text content renders ABOVE floral corners */
+.cover-content {
+  position: relative;
+  z-index: 20 !important;
+}
+
+/* Ensure body sections render ABOVE floral corners */
+.right-content-wrapper {
+  position: relative;
+  z-index: 5 !important;
+}
+
+.right-content-wrapper section {
+  position: relative;
+  z-index: 5 !important;
+}
+
+/* Floral dividers between sections should stay behind text */
+.floral-divider-wrap {
+  position: relative;
+  z-index: 0 !important;
+}
+
+/* Text Stylings */
+.font-script {
+  font-family: var(--font-script);
+}
+.font-heading {
+  font-family: var(--font-heading);
+}
+.font-cinzel {
+  font-family: var(--font-cinzel);
+}
+.groom-nickname, .bride-nickname {
+  font-size: var(--groom-bride-size-body, 38px) !important;
+  line-height: 1.35;
+  color: var(--color-font-names, var(--color-primary)) !important;
+  letter-spacing: var(--headings-letter-spacing, 0px) !important;
+  text-shadow: 0 2px var(--text-shadow-blur, 0px) var(--color-text-shadow, rgba(0,0,0,0.15)) !important;
+  -webkit-text-stroke: var(--names-stroke-width, 0px) var(--names-stroke-color, #000000);
+  margin-bottom: 4px;
+}
+.curtain-cover .groom-nickname, .curtain-cover .bride-nickname {
+  font-size: var(--groom-bride-size-cover, 64px) !important;
+  line-height: 1.25;
+  color: var(--color-font-names, var(--color-primary)) !important;
+  letter-spacing: var(--headings-letter-spacing, 0px) !important;
+  text-shadow: 0 2px var(--text-shadow-blur, 0px) var(--color-text-shadow, rgba(0,0,0,0.15)) !important;
+  -webkit-text-stroke: var(--names-stroke-width, 0px) var(--names-stroke-color, #000000);
+}
+
+.names-heading {
+  line-height: var(--names-line-height, 1.3) !important;
+  margin-bottom: 8px;
+}
+
+/* Squircle Avatar - Premium Custom CSS */
+.squircle-avatar {
+  width: var(--avatar-size, 130px) !important;
+  height: var(--avatar-size, 130px) !important;
+  border-radius: calc(var(--avatar-size, 130px) * 0.25) !important;
+  background-color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-script);
+  font-size: calc(var(--avatar-size, 130px) * 0.4) !important;
+  color: white;
+  box-shadow: 0 10px 25px rgba(201, 169, 110, 0.3);
+  margin: 0 auto 16px auto;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.squircle-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.squircle-avatar:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(201, 169, 110, 0.4);
+}
+
+/* Styled Cards */
+.wedding-card {
+  background: var(--color-card-bg);
+  border: 1.5px solid var(--color-primary);
+  border-radius: 18px;
+  padding: 24px 20px;
+  box-shadow: 0 10px 30px rgba(44, 62, 43, 0.05);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+.wedding-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(44, 62, 43, 0.08);
+}
+
+/* Custom Buttons */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(201, 169, 110, 0.4);
+}
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(201, 169, 110, 0.5);
+}
+
+.btn-pill {
+  border-radius: 9999px !important;
+}
+
+.btn-action {
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 110px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(201, 169, 110, 0.3);
+  text-decoration: none;
+}
+.btn-action:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(201, 169, 110, 0.45);
+}
+
+/* Floating Audio Control */
+.audio-player-btn {
+  position: fixed;
+  bottom: 80px;
+  right: 16px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 90;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  color: var(--color-text-dark);
+}
+
+.audio-player-btn:hover {
+  transform: scale(1.1);
+  background: white;
+}
+
+/* Marquee Animation (nama mempelai melayang) */
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+.animate-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 25s linear infinite;
+}
+
+/* Particle Canvas Container */
+#particles-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Floating Bottom Navigation Bar */
+.bottom-nav {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 88%;
+  max-width: 360px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(201, 169, 110, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 9999px;
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 4px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-size: 9px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  width: 22%;
+  padding: 2px 0;
+}
+
+.bottom-nav-item svg {
+  width: 18px;
+  height: 18px;
+  margin-bottom: 2px;
+  transition: transform 0.3s ease;
+}
+
+.bottom-nav-item:hover, .bottom-nav-item.active {
+  color: #709FB0;
+}
+
+.bottom-nav-item:hover svg, .bottom-nav-item.active svg {
+  transform: translateY(-3px);
+}
+
+/* Dot Slider Indicators */
+.dot-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #E2DDD5;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.dot-indicator.active {
+  background-color: var(--color-primary);
+  width: 25px;
+  border-radius: 5px;
+}
+
+/* Form Styles */
+.form-input {
+  width: 100%;
+  background-color: #FAF7F2;
+  border: 1px solid rgba(201, 169, 110, 0.3);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: var(--color-text-dark);
+  font-family: var(--font-body);
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+.form-input:focus {
+  border-color: var(--color-primary);
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.15);
+}
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(44, 62, 43, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal-content {
+  background: white;
+  border-radius: 24px;
+  width: 90%;
+  max-width: 480px;
+  padding: 30px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  transform: scale(0.9);
+  transition: all 0.3s ease;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-overlay.active .modal-content {
+  transform: scale(1);
+}
+
+/* Typewriter / Fade effect helper */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Dynamic styling overrides for customizable layout */
+.floral-divider-wrap {
+  max-width: var(--floral-divider-size, 200px) !important;
+  width: 100%;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: block !important;
+  text-align: center !important;
+}
+
+.wedding-section-title {
+  color: var(--color-font-headings, var(--color-primary)) !important;
+  font-size: var(--font-size-headings, 48px) !important;
+  letter-spacing: var(--headings-letter-spacing, 0px) !important;
+  text-shadow: 0 2px var(--text-shadow-blur, 0px) var(--color-text-shadow, rgba(0,0,0,0.15)) !important;
+  -webkit-text-stroke: var(--headings-stroke-width, 0px) var(--headings-stroke-color, #000000);
+}
+
+/* Color and Size Overrides for Body Text elements */
+.groom-parents, .bride-parents,
+.akad-address, .resepsi-address,
+#story-carousel-container p,
+#turut-mengundang-groom li, #turut-mengundang-bride li,
+#ucapan p,
+main > section p,
+.font-heading.text-stone-600 {
+  color: var(--color-font-body, var(--color-text-muted)) !important;
+  font-size: var(--font-size-body, 14px) !important;
+  letter-spacing: var(--body-letter-spacing, 0px) !important;
+  line-height: var(--body-line-height, 1.5) !important;
+  text-shadow: 0 1px var(--text-shadow-blur, 0px) var(--color-text-shadow, rgba(0,0,0,0.15)) !important;
+  -webkit-text-stroke: var(--body-stroke-width, 0px) var(--body-stroke-color, #000000);
+}
+
+#cover-title-label {
+  color: var(--color-cover-title, #78716c) !important;
+  font-size: var(--font-size-cover-title, 12px) !important;
+  letter-spacing: var(--cover-title-letter-spacing, 0.18em) !important;
+  text-shadow: 0 1px var(--text-shadow-blur, 0px) var(--color-text-shadow, rgba(0,0,0,0.15)) !important;
+  -webkit-text-stroke: var(--cover-title-stroke-width, 0px) var(--cover-title-stroke-color, #000000);
+}
+
+#hero-title-label {
+  color: var(--color-hero-title, #2c3e2b) !important;
+  font-size: var(--font-size-hero-title, 12px) !important;
+  letter-spacing: var(--headings-letter-spacing, 0px) !important;
+  text-shadow: 0 1px var(--text-shadow-blur, 0px) var(--color-text-shadow, rgba(0,0,0,0.15)) !important;
+  -webkit-text-stroke: var(--hero-title-stroke-width, 0px) var(--hero-title-stroke-color, #000000);
+}
+
+/* Maps Embed Container */
+.maps-embed-container {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(201, 169, 110, 0.2);
+  margin-top: 16px;
+}
+.maps-embed-container iframe {
+  width: 100%;
+  height: 200px;
+  border: none;
+}
+
+/* Theme Transition */
+* {
+  transition: background-color 0.4s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Typography Animations */
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  50% { border-color: transparent; }
+}
+
+.typewriter-text {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid var(--color-primary);
+  animation: typewriter 3s steps(30) 1s forwards, blink-caret 0.75s step-end infinite;
+  width: 0;
+  display: inline-block;
+}
+
+.letter-stagger span {
+  opacity: 0;
+  display: inline-block;
+  animation: letterReveal 0.5s ease forwards;
+}
+
+@keyframes letterReveal {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Scroll Animation Variants */
+.reveal-zoom-in {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal-zoom-in.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.reveal-slide-right {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal-slide-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-flip-left {
+  opacity: 0;
+  transform: perspective(600px) rotateY(15deg);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal-flip-left.visible {
+  opacity: 1;
+  transform: perspective(600px) rotateY(0deg);
+}
+
+.reveal-fade-down {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal-fade-down.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Cover Animation Variants */
+.curtain-cover.cover-fade.opened {
+  transform: none;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.curtain-cover.cover-slide-up.opened {
+  transform: translateY(-100%);
+}
+
+/* Bokeh Background */
+.bokeh-circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.15;
+  animation: bokehFloat 8s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes bokehFloat {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(30px, -30px) scale(1.2); }
+}
+
+/* CSS Waves Background */
+.waves-bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 150px;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  width: 200%;
+  height: 100px;
+  background: var(--color-primary);
+  opacity: 0.05;
+  border-radius: 50% 50% 0 0;
+  animation: waveMove 6s ease-in-out infinite alternate;
+}
+
+.wave:nth-child(2) {
+  height: 80px;
+  opacity: 0.03;
+  animation-duration: 8s;
+  animation-delay: 0.5s;
+}
+
+@keyframes waveMove {
+  0% { transform: translateX(0) translateY(0); }
+  100% { transform: translateX(-25%) translateY(-10px); }
+}
+
+/* QR Code Container */
+.qr-code-container {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0;
+  padding: 12px;
+  background: white;
+  border-radius: 12px;
+}
+
+.qr-code-container canvas {
+  border-radius: 8px;
+}
+
+/* Explicit Centering Fallbacks for Standalone rendering */
+#hero, #mempelai, #acara, #love-story, #turut-mengundang, #ucapan {
+  text-align: center !important;
+}
+
+.wedding-section-title,
+.names-heading,
+.groom-nickname,
+.bride-nickname,
+.groom-fullname,
+.bride-fullname,
+.groom-parents,
+.bride-parents,
+.groom-bio,
+.bride-bio,
+.wedding-card,
+.curtain-cover {
+  text-align: center !important;
+}
+
+#mempelai .reveal-on-scroll {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+
+/* ==========================================================================
+   PERBAIKAN UI/UX RESPONSIVE, BUTTONS, & TOGGLE DESKTOP VIEW
+   ========================================================================== */
+
+/* 1. Global Overflow Fixes */
+html, body {
+  overflow-x: hidden !important;
+  width: 100%;
+  position: relative;
+}
+main, section, header, footer {
+  overflow-x: hidden !important;
+}
+
+/* 2. Z-Index and Decoration Layering Protection */
+.floral-corner,
+.floral-divider-wrap,
+.bokeh-circle,
+.waves-bg,
+#particles-canvas {
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+.cover-content {
+  position: relative;
+  z-index: 20 !important;
+}
+#hero, #mempelai, #acara, #love-story, #turut-mengundang, #ucapan {
+  position: relative;
+  z-index: 10;
+}
+
+/* 3. Button Sizing, Padding, and Touch Targets */
+.btn-primary {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px 20px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  min-height: 36px !important;
+  white-space: nowrap !important;
+  gap: 6px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 4px 15px rgba(201, 169, 110, 0.3) !important;
+}
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 6px 20px rgba(201, 169, 110, 0.45) !important;
+}
+.btn-primary:active {
+  transform: translateY(1px) !important;
+}
+.btn-primary svg {
+  width: 14px !important;
+  height: 14px !important;
+  min-width: 14px !important;
+  min-height: 14px !important;
+  display: inline-block !important;
+}
+
+/* 4. Bottom Navigation Content Padding Spacing */
+.main-invitation-container {
+  padding-bottom: 80px !important;
+}
+
+/* 5. Responsive Typography Clamp (Resisting screen size variations) */
+.wedding-section-title {
+  font-size: clamp(28px, 7vw, var(--font-size-headings, 40px)) !important;
+  margin-bottom: 12px !important;
+}
+.groom-nickname, .bride-nickname {
+  font-size: clamp(28px, 7vw, var(--groom-bride-size-body, 38px)) !important;
+}
+.curtain-cover .groom-nickname, 
+.curtain-cover .bride-nickname {
+  font-size: clamp(40px, 10vw, var(--groom-bride-size-cover, 64px)) !important;
+}
+p, span, li, label, input, textarea, select {
+  max-width: 100%;
+  word-wrap: break-word;
+}
+
+/* Typography High Specificity Enforcers */
+.font-script, h1, h2, h3, .groom-nickname, .bride-nickname {
+  font-family: var(--font-script), 'Great Vibes', cursive !important;
+}
+.font-heading, h4, h5, h6, .wedding-section-title, .groom-fullname, .bride-fullname {
+  font-family: var(--font-heading), 'Cormorant Garamond', serif !important;
+}
+.font-cinzel {
+  font-family: var(--font-cinzel), 'Cinzel', serif !important;
+}
+body, p, li, span, input, textarea, select {
+  font-family: var(--font-body), 'DM Sans', sans-serif !important;
+}
+
+/* Fail-safe Fallbacks for Layout Classes (Tailwind CDN robustness) */
+.flex {
+  display: flex !important;
+}
+.flex-col {
+  flex-direction: column !important;
+}
+.flex-wrap {
+  flex-wrap: wrap !important;
+}
+.justify-center {
+  justify-content: center !important;
+}
+.items-center {
+  align-items: center !important;
+}
+.gap-4 {
+  gap: 16px !important;
+}
+.gap-3 {
+  gap: 12px !important;
+}
+.gap-2 {
+  gap: 8px !important;
+}
+.w-full {
+  width: 100% !important;
+}
+.grid {
+  display: grid !important;
+}
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+}
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+.gap-6 {
+  gap: 24px !important;
+}
+
+/* Mempelai Profile Cards Styling */
+#mempelai > div:nth-child(2), #mempelai > div:nth-child(3) {
+  background: var(--color-card-bg) !important;
+  border: 1px solid rgba(201, 169, 110, 0.25) !important;
+  border-radius: 18px !important;
+  padding: 24px 20px !important;
+  box-shadow: 0 10px 30px rgba(44, 62, 43, 0.04) !important;
+  margin-bottom: 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+
+#mempelai .groom-nickname, #mempelai .bride-nickname {
+  color: #064E3B !important; /* text-emerald-800 */
+}
+
+/* Countdown Container Inline Flex Layout */
+.countdown-container {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  background-color: var(--color-primary) !important;
+  color: white !important;
+  border-radius: 14px !important;
+  padding: 10px 16px !important;
+  max-width: 280px !important;
+  margin: 12px auto !important;
+  box-shadow: 0 8px 20px rgba(201, 169, 110, 0.3) !important;
+}
+.countdown-item {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  width: 44px !important;
+}
+.countdown-item span:first-child {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+}
+.countdown-item span:last-child {
+  font-size: 8px !important;
+  text-transform: uppercase !important;
+  margin-top: 3px !important;
+  opacity: 0.8 !important;
+}
+
+/* 6. Mobile Responsive Ornament Size Override */
+@media (max-width: 640px) {
+  :root {
+    --floral-corner-size: 130px !important;
+  }
+  .countdown-container {
+    padding: 8px 12px !important;
+    gap: 4px !important;
+    max-width: 260px !important;
+  }
+  .countdown-item {
+    width: 40px !important;
+  }
+  .countdown-item span:first-child {
+    font-size: 18px !important;
+  }
+  .countdown-item span:last-child {
+    font-size: 7px !important;
+  }
+  /* Mobile section padding */
+  #hero {
+    padding: 72px 16px 40px 16px !important;
+  }
+  #mempelai, #acara, #love-story, #turut-mengundang, #ucapan {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+  }
+  /* Mobile floral divider */
+  .floral-divider-wrap {
+    max-width: 140px !important;
+  }
+}
+
+/* 7. View Toggle Float Button Styling */
+.view-toggle-btn {
+  position: fixed;
+  bottom: 68px;
+  left: 12px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  z-index: 9999;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--color-text-dark);
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+.view-toggle-btn:hover {
+  transform: scale(1.05) translateY(-2px);
+  background: white;
+  border-color: var(--color-primary-hover);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+.view-toggle-btn:active {
+  transform: scale(0.98) translateY(0);
+}
+.view-toggle-btn svg {
+  color: var(--color-primary);
+  width: 14px;
+  height: 14px;
+}
+
+/* ==========================================================================
+   A. MEDIA QUERY BREAKPOINTS (TABLET & DESKTOP AUTO LAYOUT)
+   ========================================================================== */
+
+/* Tablet Viewport Auto Mode */
+@media (min-width: 768px) {
+  .main-invitation-container {
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 0 40px rgba(44, 62, 43, 0.12);
+    border-left: 1px solid rgba(201, 169, 110, 0.2);
+    border-right: 1px solid rgba(201, 169, 110, 0.2);
+  }
+  .curtain-cover {
+    max-width: 600px;
+    left: 50% !important;
+    transform: translate(-50%, 0) !important;
+    transition: transform 1.2s cubic-bezier(0.85, 0, 0.15, 1), opacity 1.2s ease !important;
+  }
+  .curtain-cover.opened {
+    transform: translate(-50%, -100%) !important;
+  }
+  .curtain-cover.cover-slide-up.opened {
+    transform: translate(-50%, -100%) !important;
+  }
+  .curtain-cover.cover-fade.opened {
+    transform: translate(-50%, 0) !important;
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  /* Form actions layout */
+  #message-form .flex-col {
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 12px !important;
+  }
+  #message-form .btn-primary {
+    width: auto !important;
+    flex: 1 !important;
+  }
+}
+
+/* Desktop Viewport Auto Mode — TRUE DESKTOP EXPERIENCE */
+@media (min-width: 1024px) {
+  .main-invitation-container {
+    max-width: 800px !important;
+    margin: 0 auto !important;
+    box-shadow: 0 0 60px rgba(44, 62, 43, 0.1) !important;
+    border-left: 1px solid rgba(201, 169, 110, 0.15) !important;
+    border-right: 1px solid rgba(201, 169, 110, 0.15) !important;
+  }
+  .curtain-cover {
+    max-width: 800px !important;
+    left: 50% !important;
+    transform: translate(-50%, 0) !important;
+    transition: transform 1.2s cubic-bezier(0.85, 0, 0.15, 1), opacity 1.2s ease !important;
+  }
+  .curtain-cover.opened {
+    transform: translate(-50%, -100%) !important;
+  }
+  .curtain-cover.cover-slide-up.opened {
+    transform: translate(-50%, -100%) !important;
+  }
+  .curtain-cover.cover-fade.opened {
+    transform: translate(-50%, 0) !important;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Hero section: more space */
+  #hero {
+    padding: 60px 32px !important;
+  }
+  .countdown-container {
+    max-width: 360px !important;
+    padding: 14px 24px !important;
+    gap: 10px !important;
+    border-radius: 16px !important;
+  }
+  .countdown-item {
+    width: 56px !important;
+  }
+  .countdown-item span:first-child {
+    font-size: 26px !important;
+  }
+  .countdown-item span:last-child {
+    font-size: 9px !important;
+  }
+
+  /* Sections: wider content area with breathing room */
+  #mempelai, #acara, #love-story, #turut-mengundang, #ucapan {
+    max-width: 720px !important;
+    padding: 60px 36px !important;
+    margin: 0 auto !important;
+  }
+
+  /* Section titles */
+  .wedding-section-title {
+    font-size: clamp(32px, 5vw, 48px) !important;
+    margin-bottom: 20px !important;
+  }
+
+  /* Side-by-side Mempelai */
+  #mempelai {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 24px 36px !important;
+    align-items: start !important;
+    max-width: 720px !important;
+  }
+  #mempelai > div:first-child {
+    grid-column: 1 / span 2 !important;
+  }
+  #mempelai > div:nth-child(2) {
+    grid-column: 1 !important;
+    margin-bottom: 0 !important;
+  }
+  #mempelai > div:nth-child(3) {
+    grid-column: 2 !important;
+    margin-bottom: 0 !important;
+  }
+  #mempelai > div:last-child {
+    grid-column: 1 / span 2 !important;
+  }
+
+  /* Acara 2-column */
+  #acara .wedding-card {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px !important;
+    align-items: start !important;
+    padding: 32px 28px !important;
+  }
+  #acara .wedding-card > div:nth-child(2) {
+    grid-column: 1 !important;
+    margin-bottom: 0 !important;
+  }
+  #acara .wedding-card > div:nth-child(3) {
+    display: none !important;
+  }
+
+
+  #acara .wedding-card > div:nth-child(5) {
+    grid-column: 1 / -1 !important;
+    justify-self: center !important;
+    width: 100% !important;
+    margin-top: 1rem !important;
+  }
+
+  /* Avatars slightly larger */
+  .squircle-avatar {
+    width: 160px !important;
+    height: 160px !important;
+    font-size: 70px !important;
+    border-radius: 40px !important;
+  }
+
+  /* Text adjustments */
+  .groom-nickname, .bride-nickname {
+    font-size: clamp(30px, 4vw, 42px) !important;
+  }
+  .groom-fullname, .bride-fullname {
+    font-size: 18px !important;
+  }
+
+  /* Turut Mengundang 2-col */
+  #turut-mengundang .grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px !important;
+  }
+
+  /* Love Story card */
+  #love-story .wedding-card {
+    max-width: 600px !important;
+    margin: 0 auto !important;
+    padding: 36px 32px !important;
+  }
+
+  /* Guest Book */
+  #ucapan .wedding-card {
+    max-width: 600px !important;
+    margin: 0 auto !important;
+    padding: 32px !important;
+  }
+  #comments-list-container {
+    max-width: 600px !important;
+    margin: 0 auto !important;
+  }
+
+  /* Desktop floral decorations */
+  .floral-divider-wrap {
+    max-width: 220px !important;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    padding: 10px 24px !important;
+    font-size: 12px !important;
+  }
+
+  /* Bottom nav */
+  .bottom-nav {
+    max-width: 420px !important;
+    padding: 10px 6px !important;
+  }
+  .bottom-nav-item {
+    font-size: 10px !important;
+  }
+  .bottom-nav-item svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  /* Floating buttons */
+  .audio-player-btn {
+    bottom: 80px !important;
+    right: calc(50% - 440px) !important;
+    width: 46px !important;
+    height: 46px !important;
+  }
+  .view-toggle-btn {
+    bottom: 80px !important;
+    left: calc(50% - 440px) !important;
+  }
+}
+
+
+/* ==========================================================================
+   B. CLASS-BASED TOGGLE DESKTOP VIEW FORCE LAYOUT
+   (Optimized for CMS phone mockup preview — viewport forced to 1024px)
+   ========================================================================== */
+
+body.desktop-view .main-invitation-container {
+  max-width: 800px !important;
+  margin: 0 auto !important;
+  box-shadow: 0 0 50px rgba(44, 62, 43, 0.12) !important;
+  border-left: 1px solid rgba(201, 169, 110, 0.2) !important;
+  border-right: 1px solid rgba(201, 169, 110, 0.2) !important;
+}
+
+body.desktop-view .curtain-cover {
+  max-width: 800px !important;
+  left: 50% !important;
+  transform: translate(-50%, 0) !important;
+  transition: transform 1.2s cubic-bezier(0.85, 0, 0.15, 1), opacity 1.2s ease !important;
+}
+body.desktop-view .curtain-cover.opened {
+  transform: translate(-50%, -100%) !important;
+}
+body.desktop-view .curtain-cover.cover-slide-up.opened {
+  transform: translate(-50%, -100%) !important;
+}
+body.desktop-view .curtain-cover.cover-fade.opened {
+  transform: translate(-50%, 0) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Desktop Hero — contained sizes for mockup */
+body.desktop-view #hero {
+  padding: 50px 30px !important;
+}
+body.desktop-view #hero .names-heading {
+  font-size: clamp(40px, 8vw, 64px) !important;
+}
+body.desktop-view .curtain-cover .groom-nickname,
+body.desktop-view .curtain-cover .bride-nickname {
+  font-size: clamp(36px, 7vw, 56px) !important;
+}
+body.desktop-view .countdown-container {
+  max-width: 340px !important;
+  padding: 12px 20px !important;
+  gap: 8px !important;
+}
+body.desktop-view .countdown-item {
+  width: 52px !important;
+}
+body.desktop-view .countdown-item span:first-child {
+  font-size: 22px !important;
+}
+body.desktop-view .countdown-item span:last-child {
+  font-size: 8px !important;
+}
+
+/* Desktop sections — contained layout */
+body.desktop-view #mempelai,
+body.desktop-view #acara,
+body.desktop-view #love-story,
+body.desktop-view #turut-mengundang,
+body.desktop-view #ucapan {
+  max-width: 680px !important;
+  padding: 50px 30px !important;
+  margin: 0 auto !important;
+}
+
+/* Desktop section titles */
+body.desktop-view .wedding-section-title {
+  font-size: clamp(30px, 5vw, 44px) !important;
+  margin-bottom: 16px !important;
+}
+
+/* Desktop Acara grid */
+body.desktop-view #acara .wedding-card {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 16px !important;
+  align-items: start !important;
+  padding: 28px 24px !important;
+}
+body.desktop-view #acara .wedding-card > div:nth-child(2) {
+  grid-column: 1 !important;
+  margin-bottom: 0 !important;
+}
+body.desktop-view #acara .wedding-card > div:nth-child(3) {
+  display: none !important;
+}
+body.desktop-view #acara .wedding-card > div:nth-child(4) {
+  grid-column: 2 !important;
+  border-left: 1px solid rgba(201, 169, 110, 0.2) !important;
+  padding-left: 16px !important;
+}
+
+/* Desktop form actions */
+body.desktop-view #message-form .flex-col {
+  flex-direction: row !important;
+  justify-content: center !important;
+  gap: 12px !important;
+}
+body.desktop-view #message-form .btn-primary {
+  width: auto !important;
+  flex: 1 !important;
+}
+
+/* Desktop Mempelai 2-col */
+body.desktop-view #mempelai {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 24px 32px !important;
+  align-items: start !important;
+  max-width: 680px !important;
+}
+body.desktop-view #mempelai > div:first-child {
+  grid-column: 1 / span 2 !important;
+}
+body.desktop-view #mempelai > div:nth-child(2) {
+  grid-column: 1 !important;
+  margin-bottom: 0 !important;
+}
+body.desktop-view #mempelai > div:nth-child(3) {
+  grid-column: 2 !important;
+  margin-bottom: 0 !important;
+}
+body.desktop-view #mempelai > div:last-child {
+  grid-column: 1 / span 2 !important;
+}
+
+/* Desktop Turut Mengundang */
+body.desktop-view #turut-mengundang .grid {
+  grid-template-columns: 1fr 1fr !important;
+}
+
+/* Desktop Avatars */
+body.desktop-view .squircle-avatar {
+  width: 150px !important;
+  height: 150px !important;
+  font-size: 65px !important;
+  border-radius: 38px !important;
+}
+
+/* Desktop text sizes — NOT oversized */
+body.desktop-view .groom-nickname,
+body.desktop-view .bride-nickname {
+  font-size: clamp(28px, 4vw, 40px) !important;
+}
+body.desktop-view .groom-fullname,
+body.desktop-view .bride-fullname {
+  font-size: 17px !important;
+}
+
+/* Desktop love story */
+body.desktop-view #love-story .wedding-card {
+  max-width: 560px !important;
+  margin: 0 auto !important;
+  padding: 28px 24px !important;
+}
+
+/* Desktop guest book */
+body.desktop-view #ucapan .wedding-card {
+  max-width: 560px !important;
+  margin: 0 auto !important;
+  padding: 28px 24px !important;
+}
+body.desktop-view #comments-list-container {
+  max-width: 560px !important;
+  margin: 0 auto !important;
+}
+
+/* Desktop floral sizes */
+body.desktop-view .floral-corner {
+  width: 250px !important;
+  height: 250px !important;
+}
+body.desktop-view .floral-divider-wrap {
+  max-width: 200px !important;
+}
+
+/* Desktop buttons */
+body.desktop-view .btn-primary {
+  padding: 10px 22px !important;
+  font-size: 11px !important;
+}
+
+/* Desktop bottom nav */
+body.desktop-view .bottom-nav {
+  max-width: 400px !important;
+  padding: 8px 4px !important;
+}
+body.desktop-view .bottom-nav-item {
+  font-size: 9px !important;
+}
+body.desktop-view .bottom-nav-item svg {
+  width: 24px !important;
+  height: 24px !important;
+  margin-bottom: 4px !important;
+}
+
+/* Desktop closing */
+body.desktop-view .closing-section {
+  padding-bottom: 120px;
+}
+
+/* Guaranteed Safe Area for Mobile Closing Section */
+.closing-section {
+  position: relative !important;
+  z-index: 10 !important;
+  padding-bottom: 220px;
+  margin: 0 !important;
+  transform: none !important;
+}
+
+.closing-card {
+  position: relative !important;
+  z-index: 20 !important;
+  transform: none !important;
+}
+body.desktop-view section:last-of-type h2 {
+  font-size: clamp(36px, 6vw, 56px) !important;
+}
+
+
+/* FINAL UI PATCH: Floral Divider Transparency Enforcement */
+.floral-divider-wrap {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+}
+
+.floral-divider {
+    display: block;
+    margin: auto;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+

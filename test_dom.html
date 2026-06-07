@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Test DOM</title>
+</head>
+<body>
+    <section class="closing-section pb-52 px-6 pt-16">
+      <div class="closing-card backdrop-blur-md rounded-[32px] shadow-xl border border-primary/20 px-8 py-10">
+        <h3 class="font-heading text-primary font-semibold tracking-widest uppercase mb-6">Terima Kasih</h3>
+        <p class="text-sage-dark leading-relaxed mb-6 font-body">Atas doa dan ucapan Bapak/Ibu/Saudara/i, kami mengucapkan terima kasih.</p>
+        <div class="w-16 h-px bg-primary/30 mx-auto my-6"></div>
+        <p class="italic text-stone-500 mb-4 font-body">Salam,</p>
+        <h2 class="font-script text-primary leading-none"><span class="groom-nickname">Rodu</span> <span class="font-heading font-light text-3xl mx-1">&amp;</span> <span class="bride-nickname">Yeni</span></h2>
+      </div>
+    </section>
+
+    <script>
+      // Mock the app.js logic
+      let weddingConfig = {
+        visual_configs: {
+          closing_section: {
+            names_size: 120,
+            title_size: 50,
+            body_size: 30,
+            align: "right",
+            text_align: "left",
+            enabled: true,
+            card_width: 500,
+            card_padding: 32,
+            border_radius: 30,
+            opacity: 90,
+            blur: 10,
+            shadow: 12,
+            margin_top: 40,
+            margin_bottom: 0,
+            safe_bottom: 220
+          }
+        }
+      };
+
+      function applyClosingSectionStyles() {
+        const c = weddingConfig.visual_configs?.closing_section;
+        const sectionEl = document.querySelector('.closing-section');
+        if (!sectionEl) return;
+
+        if (c && c.enabled === false) {
+          sectionEl.style.display = 'none';
+          return;
+        } else {
+          sectionEl.style.display = ''; 
+        }
+
+        const conf = c || {};
+        const cardEl = sectionEl.querySelector('.closing-card');
+        if (!cardEl) return;
+
+        sectionEl.style.paddingTop = `${conf.margin_top || 40}px`;
+        sectionEl.style.paddingBottom = `${conf.safe_bottom || 220}px`;
+
+        sectionEl.classList.add('flex');
+        sectionEl.classList.remove('justify-start', 'justify-center', 'justify-end');
+        if (conf.align === 'left') sectionEl.classList.add('justify-start');
+        else if (conf.align === 'right') sectionEl.classList.add('justify-end');
+        else sectionEl.classList.add('justify-center');
+
+        cardEl.style.maxWidth = `${conf.card_width || 500}px`;
+        cardEl.style.padding = `${conf.card_padding || 32}px`;
+        cardEl.style.borderRadius = `${conf.border_radius || 30}px`;
+        cardEl.style.backgroundColor = `rgba(255, 255, 255, ${(conf.opacity ?? 90) / 100})`;
+        cardEl.style.backdropFilter = `blur(${conf.blur ?? 10}px)`;
+        cardEl.style.boxShadow = `0 20px 25px -5px rgba(0, 0, 0, ${(conf.shadow ?? 12) / 100}), 0 8px 10px -6px rgba(0, 0, 0, ${(conf.shadow ?? 12) / 100})`;
+        cardEl.style.marginBottom = `${conf.margin_bottom || 0}px`;
+
+        cardEl.classList.remove('text-left', 'text-center', 'text-right');
+        if (conf.text_align === 'left') cardEl.classList.add('text-left');
+        else if (conf.text_align === 'right') cardEl.classList.add('text-right');
+        else cardEl.classList.add('text-center');
+
+        const titleEl = cardEl.querySelector('h3.font-heading');
+        if (titleEl) {
+          titleEl.classList.remove('text-xl'); 
+          titleEl.style.fontSize = `${conf.title_size || 20}px`;
+        }
+
+        const bodyEl = cardEl.querySelector('p.text-sage-dark');
+        if (bodyEl) {
+          bodyEl.classList.remove('text-base'); 
+          bodyEl.style.fontSize = `${conf.body_size || 16}px`;
+        }
+
+        const namesEl = cardEl.querySelector('h2.font-script');
+        if (namesEl) {
+          namesEl.classList.remove('text-6xl'); 
+          namesEl.style.fontSize = `${conf.names_size || 60}px`;
+        }
+      }
+
+      // Execute immediately
+      applyClosingSectionStyles();
+    </script>
+</body>
+</html>

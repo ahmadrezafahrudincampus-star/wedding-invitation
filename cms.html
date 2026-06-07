@@ -1,0 +1,2764 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMS Dashboard - Velvet Vows</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="assets/tailwind.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #141716;
+      color: #e2e8f0;
+    }
+    .panel-glass {
+      background: rgba(30, 41, 35, 0.45);
+      border: 1px solid rgba(201, 169, 110, 0.15);
+      backdrop-filter: blur(16px);
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #C9A96E;
+      border-radius: 2px;
+    }
+    .active-tab {
+      background: #C9A96E !important;
+      color: #141716 !important;
+      font-weight: 600;
+    }
+    /* Phone Mockup Frame styling */
+    .phone-mockup {
+      width: 375px;
+      height: 760px;
+      border: 12px solid #2d2d2d;
+      border-radius: 40px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+      background: #000;
+      position: relative;
+      overflow: hidden;
+    }
+    .phone-mockup::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      height: 25px;
+      background: #2d2d2d;
+      border-bottom-left-radius: 18px;
+      border-bottom-right-radius: 18px;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body class="min-h-screen overflow-x-hidden">
+
+  <!-- Header -->
+  <header class="border-b border-stone-800 bg-[#0e1110] px-6 py-4 flex items-center justify-between z-50 sticky top-0">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-600 to-amber-400 flex items-center justify-center font-bold text-[#141716] font-cinzel text-xl shadow-lg">V</div>
+      <div>
+        <h1 class="text-xs uppercase tracking-[0.3em] font-cinzel text-amber-500 font-bold">Velvet Vows</h1>
+        <p class="text-[10px] text-stone-400 font-medium tracking-wide">CMS & Invitation Visual Builder v1.0</p>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-3">
+      <button onclick="downloadStandaloneInvitation()" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-[#141716] text-xs font-bold uppercase tracking-wider py-2 px-4 rounded-full transition-all flex items-center gap-2 shadow-lg shadow-amber-500/10">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>
+        Unduh File Undangan (.html)
+      </button>
+    </div>
+  </header>
+
+  <!-- Content Workspace Split screen -->
+  <main class="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 h-[calc(100vh-73px)]">
+    
+    <!-- LEFT PANEL: CMS CONFIGS (cols 7) -->
+    <div class="lg:col-span-7 flex flex-col h-full overflow-hidden">
+      
+      <!-- Tab Navigation -->
+      <div class="flex flex-wrap gap-1.5 mb-4 border-b border-stone-800 pb-3 overflow-x-auto custom-scroll">
+        <button onclick="switchTab('db')" id="tab-db" class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 text-xs font-semibold uppercase tracking-wider transition-all active-tab">Database (Supabase)</button>
+        <button onclick="switchTab('mempelai')" id="tab-mempelai" class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 text-xs font-semibold uppercase tracking-wider transition-all">Mempelai</button>
+        <button onclick="switchTab('visual')" id="tab-visual" class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 text-xs font-semibold uppercase tracking-wider transition-all">Desain & Ukuran</button>
+        <button onclick="switchTab('acara')" id="tab-acara" class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 text-xs font-semibold uppercase tracking-wider transition-all">Acara & Countdown</button>
+        <button onclick="switchTab('cerita')" id="tab-cerita" class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 text-xs font-semibold uppercase tracking-wider transition-all">Cerita Cinta</button>
+        <button onclick="switchTab('kado')" id="tab-kado" class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 text-xs font-semibold uppercase tracking-wider transition-all">Kado Digital</button>
+        <button onclick="switchTab('keluarga')" id="tab-keluarga" class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 text-xs font-semibold uppercase tracking-wider transition-all">Turut Mengundang</button>
+        <button onclick="switchTab('rsvp')" id="tab-rsvp" class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 text-xs font-semibold uppercase tracking-wider transition-all">RSVP & Ucapan</button>
+        <button onclick="switchTab('share')" id="tab-share" class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-300 text-xs font-semibold uppercase tracking-wider transition-all">Share Link</button>
+      </div>
+
+      <!-- Tab Content Area -->
+      <div class="flex-1 overflow-y-auto pr-2 custom-scroll space-y-6">
+        
+        <!-- ============ TAB: DATABASE ============ -->
+        <div id="content-db" class="tab-content space-y-4">
+          <div class="panel-glass rounded-2xl p-6">
+            <h3 class="font-cinzel text-amber-500 text-lg font-bold mb-2">Integrasi Database Supabase</h3>
+            <p class="text-stone-400 text-xs leading-relaxed mb-6">Untuk menghubungkan sistem Buku Tamu & RSVP secara real-time ke database Anda sendiri, silakan masukkan informasi kredensial Supabase Anda. Jika dikosongkan, sistem otomatis menggunakan **LocalStorage Fallback** (data disimpan lokal di browser).</p>
+            
+            <div class="space-y-4">
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Supabase URL</label>
+                <input type="text" id="db-url" oninput="saveDatabaseCredentials()" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all" placeholder="Contoh: https://xxxx.supabase.co">
+              </div>
+              
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Supabase Anon Key (Public Key)</label>
+                <input type="password" id="db-key" oninput="saveDatabaseCredentials()" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all" placeholder="Anon / Public API Key">
+              </div>
+              
+              <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 flex items-start gap-3 mt-4">
+                <svg class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div>
+                  <h4 class="text-xs font-bold text-amber-500 mb-1">Skema Tabel Database yang Diperlukan:</h4>
+                  <p class="text-[10px] text-stone-400 leading-relaxed mb-1">Apabila menggunakan Supabase, Anda wajib membuat dua tabel dengan nama berikut:</p>
+                  <pre class="bg-black/30 rounded p-2 text-[9px] font-mono text-stone-300 overflow-x-auto">
+-- 1. Tabel Buku Tamu (guest_messages)
+CREATE TABLE guest_messages (
+  id TEXT PRIMARY KEY,
+  name TEXT,
+  message TEXT,
+  created_at TIMESTAMP WITH TIME ZONE
+);
+
+-- 2. Tabel RSVP (rsvp_responses)
+CREATE TABLE rsvp_responses (
+  id TEXT PRIMARY KEY,
+  guest_name TEXT,
+  attendance TEXT,
+  guest_count INTEGER,
+  message TEXT,
+  created_at TIMESTAMP WITH TIME ZONE
+);</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Pengaturan Undangan -->
+          <div class="panel-glass rounded-2xl p-6 mt-4">
+            <h3 class="font-cinzel text-amber-500 text-base font-bold mb-4">Pengaturan Undangan</h3>
+            <div class="mb-4">
+              <label class="block text-[10px] uppercase tracking-widest text-amber-400/70 mb-1.5 font-semibold">URL Slug</label>
+              <input type="text" id="config-slug" oninput="updateConfig('slug', this.value); generateShareLink();" class="w-full bg-[#181c19] border border-stone-800 text-stone-250 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500 outline-none" placeholder="nama-dan-nama">
+              <p class="text-[10px] text-stone-500 mt-1">Contoh: budi-dan-ani-2025</p>
+            </div>
+            <div class="mb-4">
+              <label class="flex items-center gap-3 bg-stone-900/50 border border-stone-850 rounded-xl px-3 py-3 cursor-pointer hover:border-stone-700 transition-all">
+                <input type="checkbox" id="config-published" checked onchange="updateConfig('is_published', this.checked)" class="accent-amber-500 w-4 h-4">
+                <div>
+                  <span class="text-sm text-stone-300 font-medium">Undangan Published</span>
+                  <p class="text-[10px] text-stone-500">Aktifkan agar undangan dapat diakses publik</p>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ TAB: DESAIN & UKURAN ============ -->
+        <div id="content-visual" class="tab-content hidden space-y-4">
+          <div class="panel-glass rounded-2xl p-6">
+            <!-- Theme Selector -->
+            <div class="mb-6">
+              <label class="block text-[10px] uppercase tracking-widest text-amber-400/70 mb-2 font-semibold">Tema Undangan</label>
+              <select id="visual-theme-select" onchange="selectTheme(this.value)" class="w-full bg-stone-900 border border-stone-700 text-stone-200 rounded-lg px-3 py-2.5 text-sm focus:border-amber-500 outline-none">
+                <option value="watercolor_green">🌿 Watercolor Green (Default)</option>
+                <option value="golden_blossom">🌸 Golden Blossom</option>
+                <option value="rustic_wood">🪵 Rustic Wood</option>
+                <option value="royal_navy">👑 Royal Navy</option>
+                <option value="sakura_blush">🌸 Sakura Blush</option>
+              </select>
+            </div>
+            <hr class="border-stone-800 my-4">
+            
+            <h3 class="font-cinzel text-amber-500 text-base font-bold mb-4">Pengaturan Warna Teks</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Warna Nama Mempelai</label>
+                <div class="flex gap-2">
+                  <input type="color" id="visual-color-names" oninput="updateConfig('visual_configs.font_color_names', this.value)" class="w-10 h-10 border-0 bg-transparent cursor-pointer rounded-lg">
+                  <input type="text" id="visual-color-names-hex" readonly class="flex-1 bg-[#181c19] border border-stone-800 rounded-xl px-3 text-xs text-stone-300 focus:outline-none">
+                </div>
+              </div>
+              
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Warna Judul Bagian</label>
+                <div class="flex gap-2">
+                  <input type="color" id="visual-color-headings" oninput="updateConfig('visual_configs.font_color_headings', this.value)" class="w-10 h-10 border-0 bg-transparent cursor-pointer rounded-lg">
+                  <input type="text" id="visual-color-headings-hex" readonly class="flex-1 bg-[#181c19] border border-stone-800 rounded-xl px-3 text-xs text-stone-300 focus:outline-none">
+                </div>
+              </div>
+              
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Warna Teks Deskripsi / Isi</label>
+                <div class="flex gap-2">
+                  <input type="color" id="visual-color-body" oninput="updateConfig('visual_configs.font_color_body', this.value)" class="w-10 h-10 border-0 bg-transparent cursor-pointer rounded-lg">
+                  <input type="text" id="visual-color-body-hex" readonly class="flex-1 bg-[#181c19] border border-stone-800 rounded-xl px-3 text-xs text-stone-300 focus:outline-none">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Warna Teks Sampul Depan (Cover)</label>
+                <div class="flex gap-2">
+                  <input type="color" id="visual-color-cover-title" oninput="updateConfig('visual_configs.color_cover_title', this.value)" class="w-10 h-10 border-0 bg-transparent cursor-pointer rounded-lg">
+                  <input type="text" id="visual-color-cover-title-hex" readonly class="flex-1 bg-[#181c19] border border-stone-800 rounded-xl px-3 text-xs text-stone-300 focus:outline-none">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Warna Teks Pembuka (Save the Date)</label>
+                <div class="flex gap-2">
+                  <input type="color" id="visual-color-hero-title" oninput="updateConfig('visual_configs.color_hero_title', this.value)" class="w-10 h-10 border-0 bg-transparent cursor-pointer rounded-lg">
+                  <input type="text" id="visual-color-hero-title-hex" readonly class="flex-1 bg-[#181c19] border border-stone-800 rounded-xl px-3 text-xs text-stone-300 focus:outline-none">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Warna Stroke (Garis Tepi) Nama</label>
+                <div class="flex gap-2">
+                  <input type="color" id="visual-names-stroke-color" oninput="updateConfig('visual_configs.names_stroke_color', this.value)" class="w-10 h-10 border-0 bg-transparent cursor-pointer rounded-lg">
+                  <input type="text" id="visual-names-stroke-color-hex" readonly class="flex-1 bg-[#181c19] border border-stone-800 rounded-xl px-3 text-xs text-stone-300 focus:outline-none">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Warna Stroke (Garis Tepi) Judul Bagian</label>
+                <div class="flex gap-2">
+                  <input type="color" id="visual-headings-stroke-color" oninput="updateConfig('visual_configs.headings_stroke_color', this.value)" class="w-10 h-10 border-0 bg-transparent cursor-pointer rounded-lg">
+                  <input type="text" id="visual-headings-stroke-color-hex" readonly class="flex-1 bg-[#181c19] border border-stone-800 rounded-xl px-3 text-xs text-stone-300 focus:outline-none">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Warna Stroke (Garis Tepi) Teks Isi</label>
+                <div class="flex gap-2">
+                  <input type="color" id="visual-body-stroke-color" oninput="updateConfig('visual_configs.body_stroke_color', this.value)" class="w-10 h-10 border-0 bg-transparent cursor-pointer rounded-lg">
+                  <input type="text" id="visual-body-stroke-color-hex" readonly class="flex-1 bg-[#181c19] border border-stone-800 rounded-xl px-3 text-xs text-stone-300 focus:outline-none">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Warna Stroke (Garis Tepi) Teks Sampul</label>
+                <div class="flex gap-2">
+                  <input type="color" id="visual-cover-title-stroke-color" oninput="updateConfig('visual_configs.cover_title_stroke_color', this.value)" class="w-10 h-10 border-0 bg-transparent cursor-pointer rounded-lg">
+                  <input type="text" id="visual-cover-title-stroke-color-hex" readonly class="flex-1 bg-[#181c19] border border-stone-800 rounded-xl px-3 text-xs text-stone-300 focus:outline-none">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Warna Stroke (Garis Tepi) Teks Pembuka</label>
+                <div class="flex gap-2">
+                  <input type="color" id="visual-hero-title-stroke-color" oninput="updateConfig('visual_configs.hero_title_stroke_color', this.value)" class="w-10 h-10 border-0 bg-transparent cursor-pointer rounded-lg">
+                  <input type="text" id="visual-hero-title-stroke-color-hex" readonly class="flex-1 bg-[#181c19] border border-stone-800 rounded-xl px-3 text-xs text-stone-300 focus:outline-none">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-glass rounded-2xl p-6">
+            <h3 class="font-cinzel text-amber-500 text-base font-bold mb-4">Pengaturan Teks Label</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Teks Sampul Depan</label>
+                <input type="text" id="visual-text-cover-title" oninput="updateConfig('visual_configs.text_cover_title', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all" placeholder="Contoh: Undangan Pernikahan">
+              </div>
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Teks Pembuka Halaman Utama</label>
+                <input type="text" id="visual-text-hero-title" oninput="updateConfig('visual_configs.text_hero_title', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all" placeholder="Contoh: Save The Date">
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-glass rounded-2xl p-6">
+            <h3 class="font-cinzel text-amber-500 text-base font-bold mb-4">Pengaturan Ukuran Font</h3>
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Ukuran Nama Mempelai di Sampul Depan (Cover)</label>
+                  <span id="visual-size-names-cover-val" class="text-xs text-amber-500 font-bold font-mono">80px</span>
+                </div>
+                <input type="range" id="visual-size-names-cover" min="40" max="120" step="1" oninput="document.getElementById('visual-size-names-cover-val').textContent = this.value + 'px'; updateConfig('visual_configs.font_size_names_cover', parseInt(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Ukuran Nama Mempelai di Halaman Isi</label>
+                  <span id="visual-size-names-body-val" class="text-xs text-amber-500 font-bold font-mono">45px</span>
+                </div>
+                <input type="range" id="visual-size-names-body" min="20" max="80" step="1" oninput="document.getElementById('visual-size-names-body-val').textContent = this.value + 'px'; updateConfig('visual_configs.font_size_names_body', parseInt(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Ukuran Judul Bagian (Mempelai, Acara, dsb)</label>
+                  <span id="visual-size-headings-val" class="text-xs text-amber-500 font-bold font-mono">48px</span>
+                </div>
+                <input type="range" id="visual-size-headings" min="24" max="72" step="1" oninput="document.getElementById('visual-size-headings-val').textContent = this.value + 'px'; updateConfig('visual_configs.font_size_headings', parseInt(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Ukuran Teks Deskripsi / Isi</label>
+                  <span id="visual-size-body-val" class="text-xs text-amber-500 font-bold font-mono">14px</span>
+                </div>
+                <input type="range" id="visual-size-body" min="10" max="24" step="1" oninput="document.getElementById('visual-size-body-val').textContent = this.value + 'px'; updateConfig('visual_configs.font_size_body', parseInt(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Ukuran Teks Sampul Depan (Cover)</label>
+                  <span id="visual-size-cover-title-val" class="text-xs text-amber-500 font-bold font-mono">12px</span>
+                </div>
+                <input type="range" id="visual-size-cover-title" min="8" max="32" step="1" oninput="document.getElementById('visual-size-cover-title-val').textContent = this.value + 'px'; updateConfig('visual_configs.size_cover_title', parseInt(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Ukuran Teks Pembuka Halaman Utama</label>
+                  <span id="visual-size-hero-title-val" class="text-xs text-amber-500 font-bold font-mono">12px</span>
+                </div>
+                <input type="range" id="visual-size-hero-title" min="8" max="32" step="1" oninput="document.getElementById('visual-size-hero-title-val').textContent = this.value + 'px'; updateConfig('visual_configs.size_hero_title', parseInt(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-glass rounded-2xl p-6">
+            <h3 class="font-cinzel text-amber-500 text-base font-bold mb-4">Pengaturan Jarak & Bayangan Teks</h3>
+            <div class="space-y-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Warna Bayangan Teks (Shadow)</label>
+                  <div class="flex gap-2">
+                    <input type="color" id="visual-color-shadow" oninput="updateConfig('visual_configs.shadow_color', this.value)" class="w-10 h-10 border-0 bg-transparent cursor-pointer rounded-lg">
+                    <input type="text" id="visual-color-shadow-hex" readonly class="flex-1 bg-[#181c19] border border-stone-800 rounded-xl px-3 text-xs text-stone-300 focus:outline-none">
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between items-center mb-1">
+                    <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Kekuatan Blur Bayangan</label>
+                    <span id="visual-shadow-blur-val" class="text-xs text-amber-500 font-bold font-mono">0px</span>
+                  </div>
+                  <input type="range" id="visual-shadow-blur" min="0" max="10" step="1" oninput="document.getElementById('visual-shadow-blur-val').textContent = this.value + 'px'; updateConfig('visual_configs.shadow_blur', parseInt(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Jarak Antar Huruf (Judul & Nama)</label>
+                  <span id="visual-letter-spacing-headings-val" class="text-xs text-amber-500 font-bold font-mono">0px</span>
+                </div>
+                <input type="range" id="visual-letter-spacing-headings" min="-2" max="8" step="1" oninput="document.getElementById('visual-letter-spacing-headings-val').textContent = this.value + 'px'; updateConfig('visual_configs.letter_spacing_headings', parseInt(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Jarak Antar Huruf (Teks Deskripsi / Isi)</label>
+                  <span id="visual-letter-spacing-body-val" class="text-xs text-amber-500 font-bold font-mono">0px</span>
+                </div>
+                <input type="range" id="visual-letter-spacing-body" min="-1" max="4" step="1" oninput="document.getElementById('visual-letter-spacing-body-val').textContent = this.value + 'px'; updateConfig('visual_configs.letter_spacing_body', parseInt(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Tinggi Baris / Jarak Antar Baris (Teks Isi)</label>
+                  <span id="visual-line-height-body-val" class="text-xs text-amber-500 font-bold font-mono">1.5</span>
+                </div>
+                <input type="range" id="visual-line-height-body" min="1.2" max="2.0" step="0.1" oninput="document.getElementById('visual-line-height-body-val').textContent = this.value; updateConfig('visual_configs.line_height_body', parseFloat(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Tinggi Baris (Jarak Vertikal) Nama Mempelai</label>
+                  <span id="visual-names-line-height-val" class="text-xs text-amber-500 font-bold font-mono">1.1</span>
+                </div>
+                <input type="range" id="visual-names-line-height" min="0.8" max="2.0" step="0.05" oninput="document.getElementById('visual-names-line-height-val').textContent = this.value; updateConfig('visual_configs.names_line_height', parseFloat(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Ketebalan Stroke (Garis Tepi) Nama</label>
+                  <span id="visual-names-stroke-width-val" class="text-xs text-amber-500 font-bold font-mono">0px</span>
+                </div>
+                <input type="range" id="visual-names-stroke-width" min="0" max="5" step="0.5" oninput="document.getElementById('visual-names-stroke-width-val').textContent = this.value + 'px'; updateConfig('visual_configs.names_stroke_width', parseFloat(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Ketebalan Stroke (Garis Tepi) Judul Bagian</label>
+                  <span id="visual-headings-stroke-width-val" class="text-xs text-amber-500 font-bold font-mono">0px</span>
+                </div>
+                <input type="range" id="visual-headings-stroke-width" min="0" max="5" step="0.5" oninput="document.getElementById('visual-headings-stroke-width-val').textContent = this.value + 'px'; updateConfig('visual_configs.headings_stroke_width', parseFloat(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Ketebalan Stroke (Garis Tepi) Teks Isi</label>
+                  <span id="visual-body-stroke-width-val" class="text-xs text-amber-500 font-bold font-mono">0px</span>
+                </div>
+                <input type="range" id="visual-body-stroke-width" min="0" max="3" step="0.2" oninput="document.getElementById('visual-body-stroke-width-val').textContent = this.value + 'px'; updateConfig('visual_configs.body_stroke_width', parseFloat(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Ketebalan Stroke (Garis Tepi) Teks Sampul</label>
+                  <span id="visual-cover-title-stroke-width-val" class="text-xs text-amber-500 font-bold font-mono">0px</span>
+                </div>
+                <input type="range" id="visual-cover-title-stroke-width" min="0" max="4" step="0.5" oninput="document.getElementById('visual-cover-title-stroke-width-val').textContent = this.value + 'px'; updateConfig('visual_configs.cover_title_stroke_width', parseFloat(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Ketebalan Stroke (Garis Tepi) Teks Pembuka</label>
+                  <span id="visual-hero-title-stroke-width-val" class="text-xs text-amber-500 font-bold font-mono">0px</span>
+                </div>
+                <input type="range" id="visual-hero-title-stroke-width" min="0" max="4" step="0.5" oninput="document.getElementById('visual-hero-title-stroke-width-val').textContent = this.value + 'px'; updateConfig('visual_configs.hero_title_stroke_width', parseFloat(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-glass rounded-2xl p-6">
+            <h3 class="font-cinzel text-amber-500 text-base font-bold mb-4">Pengaturan Ukuran Hiasan & Foto</h3>
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Ukuran Hiasan Bunga Pojok</label>
+                  <span id="visual-size-floral-corner-val" class="text-xs text-amber-500 font-bold font-mono">250px</span>
+                </div>
+                <input type="range" id="visual-size-floral-corner" min="100" max="400" step="5" oninput="document.getElementById('visual-size-floral-corner-val').textContent = this.value + 'px'; updateConfig('visual_configs.size_floral_corner', parseInt(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Ukuran Bunga Pembatas Halaman (Pemisah)</label>
+                  <span id="visual-size-floral-divider-val" class="text-xs text-amber-500 font-bold font-mono">200px</span>
+                </div>
+                <input type="range" id="visual-size-floral-divider" min="80" max="350" step="5" oninput="document.getElementById('visual-size-floral-divider-val').textContent = this.value + 'px'; updateConfig('visual_configs.size_floral_divider', parseInt(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Ukuran Bingkai Foto Profil Mempelai</label>
+                  <span id="visual-size-avatar-val" class="text-xs text-amber-500 font-bold font-mono">160px</span>
+                </div>
+                <input type="range" id="visual-size-avatar" min="80" max="250" step="5" oninput="document.getElementById('visual-size-avatar-val').textContent = this.value + 'px'; updateConfig('visual_configs.size_avatar', parseInt(this.value))" class="w-full accent-amber-600 bg-stone-800 rounded-lg appearance-none h-1.5 cursor-pointer">
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-glass rounded-2xl p-6">
+            <h3 class="font-cinzel text-amber-500 text-base font-bold mb-4">Pengaturan Musik Latar</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Pilih Lagu (Preset)</label>
+                <select id="audio-preset-select" onchange="selectMusicPreset(this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all">
+                  <option value="assets/audio/wedding-piano.mp3">Wedding Piano (Default)</option>
+                  <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Beautiful in White (Preset 1)</option>
+                  <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Canon in D (Preset 2)</option>
+                  <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">A Thousand Years (Preset 3)</option>
+                  <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">Wedding March (Preset 4)</option>
+                  <option value="custom">-- Gunakan URL Lagu Sendiri (Kustom) --</option>
+                </select>
+              </div>
+
+              <div id="custom-audio-url-container" class="hidden space-y-4">
+                <div>
+                  <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">URL File Audio (MP3)</label>
+                  <input type="text" id="audio-custom-url" oninput="updateCustomMusic()" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all" placeholder="https://domain.com/music.mp3">
+                </div>
+
+                <div>
+                  <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Atau Unggah Lagu Sendiri (MP3)</label>
+                  <div class="flex items-center gap-3">
+                    <input type="file" id="audio-file-upload" accept="audio/mp3, audio/*" onchange="uploadAudioFile(this)" class="hidden">
+                    <button type="button" onclick="document.getElementById('audio-file-upload').click()" class="bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-semibold py-2.5 px-4 rounded-xl transition-all shadow-md">Pilih File Lagu</button>
+                    <span id="audio-upload-status" class="text-stone-400 text-[11px] truncate max-w-xs">Belum ada file terpilih</span>
+                  </div>
+                  <span class="text-[10px] text-stone-500 mt-1 block">Rekomendasi ukuran file: di bawah 3MB (Maksimal 4MB) untuk kestabilan penyimpanan lokal.</span>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Judul Lagu</label>
+                <input type="text" id="audio-title" oninput="updateMusicTitle(this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all" placeholder="Beautiful in White">
+              </div>
+            </div>
+          </div>
+
+          <!-- Pengaturan Gaya & Animasi Tambahan -->
+          <div class="panel-glass rounded-2xl p-6 mt-4">
+            <h3 class="font-cinzel text-amber-500 text-base font-bold mb-4">Pengaturan Gaya & Animasi Tambahan</h3>
+            
+            <!-- Font Family Selectors -->
+            <div class="grid grid-cols-2 gap-3 mb-4">
+              <div>
+                <label class="block text-[10px] uppercase tracking-widest text-amber-400/70 mb-1.5 font-semibold">Font Heading</label>
+                <select id="visual-font-heading" onchange="updateConfig('visual_configs.font_heading', this.value)" class="w-full bg-stone-900 border border-stone-700 text-stone-200 rounded-lg px-3 py-2 text-sm focus:border-amber-500 outline-none">
+                  <option value="Cormorant Garamond">Cormorant Garamond</option>
+                  <option value="Playfair Display">Playfair Display</option>
+                  <option value="Libre Baskerville">Libre Baskerville</option>
+                  <option value="Cinzel">Cinzel</option>
+                  <option value="Lora">Lora</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[10px] uppercase tracking-widest text-amber-400/70 mb-1.5 font-semibold">Font Body</label>
+                <select id="visual-font-body" onchange="updateConfig('visual_configs.font_body', this.value)" class="w-full bg-stone-900 border border-stone-700 text-stone-200 rounded-lg px-3 py-2 text-sm focus:border-amber-500 outline-none">
+                  <option value="DM Sans">DM Sans</option>
+                  <option value="Lato">Lato</option>
+                  <option value="Source Sans Pro">Source Sans Pro</option>
+                  <option value="Raleway">Raleway</option>
+                  <option value="Quicksand">Quicksand</option>
+                </select>
+              </div>
+            </div>
+            <hr class="border-stone-800 my-4">
+
+            <!-- Primary/Secondary Color Pickers -->
+            <div class="grid grid-cols-2 gap-3 mb-4">
+              <div>
+                <label class="block text-[10px] uppercase tracking-widest text-amber-400/70 mb-1.5 font-semibold">Warna Utama (Primary)</label>
+                <div class="flex items-center gap-2">
+                  <input type="color" id="visual-primary-color" value="#C9A96E" onchange="updateConfig('visual_configs.primary_color', this.value)" class="w-10 h-10 rounded-lg cursor-pointer border border-stone-700 bg-transparent">
+                  <span id="visual-primary-color-hex" class="text-xs text-stone-400 font-mono">#C9A96E</span>
+                </div>
+              </div>
+              <div>
+                <label class="block text-[10px] uppercase tracking-widest text-amber-400/70 mb-1.5 font-semibold">Warna Sekunder</label>
+                <div class="flex items-center gap-2">
+                  <input type="color" id="visual-secondary-color" value="#FAF7F2" onchange="updateConfig('visual_configs.secondary_color', this.value)" class="w-10 h-10 rounded-lg cursor-pointer border border-stone-700 bg-transparent">
+                  <span id="visual-secondary-color-hex" class="text-xs text-stone-400 font-mono">#FAF7F2</span>
+                </div>
+              </div>
+            </div>
+            <hr class="border-stone-800 my-4">
+
+            <!-- Animated Background Selector -->
+            <div class="mb-4">
+              <label class="block text-[10px] uppercase tracking-widest text-amber-400/70 mb-1.5 font-semibold">Animasi Background</label>
+              <select id="visual-animated-bg" onchange="updateConfig('visual_configs.animated_bg.type', this.value)" class="w-full bg-stone-900 border border-stone-700 text-stone-200 rounded-lg px-3 py-2 text-sm focus:border-amber-500 outline-none">
+                <option value="falling_leaves">🍃 Falling Leaves (Default)</option>
+                <option value="bokeh">✨ Bokeh Blur</option>
+                <option value="waves">🌊 CSS Waves</option>
+                <option value="parallax">🏔️ Parallax</option>
+                <option value="none">❌ Tidak Ada</option>
+              </select>
+            </div>
+            <hr class="border-stone-800 my-4">
+
+            <!-- Typography Animation Toggles -->
+            <div class="mb-4">
+              <label class="block text-[10px] uppercase tracking-widest text-amber-400/70 mb-2 font-semibold">Animasi Teks</label>
+              <div class="space-y-2">
+                <label class="flex items-center gap-3 bg-stone-900/50 border border-stone-800 rounded-lg px-3 py-2 cursor-pointer hover:border-stone-700 transition-all">
+                  <input type="checkbox" id="visual-marquee" onchange="updateConfig('visual_configs.marquee_enabled', this.checked)" class="accent-amber-500 w-4 h-4">
+                  <span class="text-sm text-stone-300">Marquee (Teks Berjalan)</span>
+                </label>
+                <label class="flex items-center gap-3 bg-stone-900/50 border border-stone-800 rounded-lg px-3 py-2 cursor-pointer hover:border-stone-700 transition-all">
+                  <input type="checkbox" id="visual-typewriter" onchange="updateConfig('visual_configs.typewriter_enabled', this.checked)" class="accent-amber-500 w-4 h-4">
+                  <span class="text-sm text-stone-300">Typewriter (Efek Mengetik)</span>
+                </label>
+                <label class="flex items-center gap-3 bg-stone-900/50 border border-stone-800 rounded-lg px-3 py-2 cursor-pointer hover:border-stone-700 transition-all">
+                  <input type="checkbox" id="visual-letter-stagger" onchange="updateConfig('visual_configs.letter_stagger_enabled', this.checked)" class="accent-amber-500 w-4 h-4">
+                  <span class="text-sm text-stone-300">Letter Stagger (Huruf Satu-satu)</span>
+                </label>
+              </div>
+            </div>
+            <hr class="border-stone-800 my-4">
+
+            <!-- Cover Animation Selector -->
+            <div class="mb-4">
+              <label class="block text-[10px] uppercase tracking-widest text-amber-400/70 mb-1.5 font-semibold">Animasi Cover</label>
+              <select id="visual-cover-animation" onchange="updateConfig('visual_configs.cover_animation', this.value)" class="w-full bg-stone-900 border border-stone-700 text-stone-200 rounded-lg px-3 py-2 text-sm focus:border-amber-500 outline-none">
+                <option value="curtain">🎭 Curtain (Default)</option>
+                <option value="fade">🌫️ Fade Out</option>
+                <option value="slide_up">⬆️ Slide Up</option>
+              </select>
+            </div>
+            <hr class="border-stone-800 my-4">
+
+            <!-- Ornament Toggles -->
+            <div class="mb-4">
+              <label class="block text-[10px] uppercase tracking-widest text-amber-400/70 mb-2 font-semibold">Ornamen & Dekorasi</label>
+              <div class="space-y-2">
+                <label class="flex items-center gap-3 bg-stone-900/50 border border-stone-800 rounded-lg px-3 py-2 cursor-pointer hover:border-stone-700 transition-all">
+                  <input type="checkbox" id="visual-corner-flowers" checked onchange="updateConfig('visual_configs.corner_flowers_enabled', this.checked)" class="accent-amber-500 w-4 h-4">
+                  <span class="text-sm text-stone-300">Bunga Sudut (Corner Flowers)</span>
+                </label>
+                <label class="flex items-center gap-3 bg-stone-900/50 border border-stone-800 rounded-lg px-3 py-2 cursor-pointer hover:border-stone-700 transition-all">
+                  <input type="checkbox" id="visual-dividers" checked onchange="updateConfig('visual_configs.dividers_enabled', this.checked)" class="accent-amber-500 w-4 h-4">
+                  <span class="text-sm text-stone-300">Pembatas Bunga (Dividers)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Penutup / Closing Section -->
+        <div class="panel-glass rounded-2xl p-6 mt-4">
+          <h3 class="font-heading text-lg font-bold text-amber-500 mb-4 border-b border-stone-800 pb-2">PENUTUP / CLOSING SECTION</h3>
+          
+          <!-- Card Settings -->
+          <div class="space-y-4 mb-6">
+            <h4 class="text-xs uppercase tracking-widest text-amber-400/70 font-semibold mb-2">=== CARD ===</h4>
+            
+            <label class="flex items-center gap-3 bg-stone-900/50 border border-stone-800 rounded-lg px-3 py-3 cursor-pointer hover:border-stone-700 transition-all">
+              <input type="checkbox" id="closing-enabled" checked onchange="updateConfig('visual_configs.closing_section.enabled', this.checked)" class="accent-amber-500 w-4 h-4">
+              <span class="text-sm text-stone-300">Aktifkan Card Penutup</span>
+            </label>
+
+            <div>
+              <div class="flex justify-between mb-1">
+                <label class="text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Lebar Card</label>
+                <span class="text-[10px] text-amber-500 font-mono" id="val-closing-width">500px</span>
+              </div>
+              <input type="range" id="closing-width" min="300" max="800" value="500" oninput="document.getElementById('val-closing-width').textContent=this.value+'px'; updateConfig('visual_configs.closing_section.card_width', parseInt(this.value))" class="w-full accent-amber-600">
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-1">
+                <label class="text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Padding Dalam Card</label>
+                <span class="text-[10px] text-amber-500 font-mono" id="val-closing-padding">32px</span>
+              </div>
+              <input type="range" id="closing-padding" min="16" max="64" value="32" oninput="document.getElementById('val-closing-padding').textContent=this.value+'px'; updateConfig('visual_configs.closing_section.card_padding', parseInt(this.value))" class="w-full accent-amber-600">
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-1">
+                <label class="text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Radius Card</label>
+                <span class="text-[10px] text-amber-500 font-mono" id="val-closing-radius">30px</span>
+              </div>
+              <input type="range" id="closing-radius" min="0" max="50" value="30" oninput="document.getElementById('val-closing-radius').textContent=this.value+'px'; updateConfig('visual_configs.closing_section.border_radius', parseInt(this.value))" class="w-full accent-amber-600">
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-1">
+                <label class="text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Transparansi Card</label>
+                <span class="text-[10px] text-amber-500 font-mono" id="val-closing-opacity">90%</span>
+              </div>
+              <input type="range" id="closing-opacity" min="0" max="100" value="90" oninput="document.getElementById('val-closing-opacity').textContent=this.value+'%'; updateConfig('visual_configs.closing_section.opacity', parseInt(this.value))" class="w-full accent-amber-600">
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-1">
+                <label class="text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Blur Card</label>
+                <span class="text-[10px] text-amber-500 font-mono" id="val-closing-blur">10px</span>
+              </div>
+              <input type="range" id="closing-blur" min="0" max="30" value="10" oninput="document.getElementById('val-closing-blur').textContent=this.value+'px'; updateConfig('visual_configs.closing_section.blur', parseInt(this.value))" class="w-full accent-amber-600">
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-1">
+                <label class="text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Shadow Card</label>
+                <span class="text-[10px] text-amber-500 font-mono" id="val-closing-shadow">12%</span>
+              </div>
+              <input type="range" id="closing-shadow" min="0" max="30" value="12" oninput="document.getElementById('val-closing-shadow').textContent=this.value+'%'; updateConfig('visual_configs.closing_section.shadow', parseInt(this.value))" class="w-full accent-amber-600">
+            </div>
+          </div>
+
+          <!-- Spacing -->
+          <div class="space-y-4 mb-6">
+            <h4 class="text-xs uppercase tracking-widest text-amber-400/70 font-semibold mb-2">=== SPACING ===</h4>
+            
+            <div>
+              <div class="flex justify-between mb-1">
+                <label class="text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Margin Atas Section</label>
+                <span class="text-[10px] text-amber-500 font-mono" id="val-closing-mt">40px</span>
+              </div>
+              <input type="range" id="closing-mt" min="0" max="200" value="40" oninput="document.getElementById('val-closing-mt').textContent=this.value+'px'; updateConfig('visual_configs.closing_section.margin_top', parseInt(this.value))" class="w-full accent-amber-600">
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-1">
+                <label class="text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Margin Bawah Card</label>
+                <span class="text-[10px] text-amber-500 font-mono" id="val-closing-mb">0px</span>
+              </div>
+              <input type="range" id="closing-mb" min="0" max="400" value="0" oninput="document.getElementById('val-closing-mb').textContent=this.value+'px'; updateConfig('visual_configs.closing_section.margin_bottom', parseInt(this.value))" class="w-full accent-amber-600">
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-1">
+                <label class="text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Safe Area Bottom</label>
+                <span class="text-[10px] text-amber-500 font-mono" id="val-closing-safe">220px</span>
+              </div>
+              <input type="range" id="closing-safe" min="50" max="350" value="220" oninput="document.getElementById('val-closing-safe').textContent=this.value+'px'; updateConfig('visual_configs.closing_section.safe_bottom', parseInt(this.value))" class="w-full accent-amber-600">
+            </div>
+          </div>
+
+          <!-- Alignment -->
+          <div class="space-y-4 mb-6">
+            <h4 class="text-xs uppercase tracking-widest text-amber-400/70 font-semibold mb-2">=== ALIGNMENT ===</h4>
+            
+            <div>
+              <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1.5 font-semibold">Posisi Horizontal</label>
+              <select id="closing-align" onchange="updateConfig('visual_configs.closing_section.align', this.value)" class="w-full bg-stone-900 border border-stone-700 text-stone-200 rounded-lg px-3 py-2 text-sm focus:border-amber-500 outline-none">
+                <option value="left">Left</option>
+                <option value="center" selected>Center</option>
+                <option value="right">Right</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1.5 font-semibold">Posisi Teks</label>
+              <select id="closing-text-align" onchange="updateConfig('visual_configs.closing_section.text_align', this.value)" class="w-full bg-stone-900 border border-stone-700 text-stone-200 rounded-lg px-3 py-2 text-sm focus:border-amber-500 outline-none">
+                <option value="left">Left</option>
+                <option value="center" selected>Center</option>
+                <option value="right">Right</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Typography -->
+          <div class="space-y-4">
+            <h4 class="text-xs uppercase tracking-widest text-amber-400/70 font-semibold mb-2">=== TYPOGRAPHY ===</h4>
+            
+            <div>
+              <div class="flex justify-between mb-1">
+                <label class="text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Ukuran Judul Terima Kasih</label>
+                <span class="text-[10px] text-amber-500 font-mono" id="val-closing-title">20px</span>
+              </div>
+              <input type="range" id="closing-title" min="12" max="60" value="20" oninput="document.getElementById('val-closing-title').textContent=this.value+'px'; updateConfig('visual_configs.closing_section.title_size', parseInt(this.value))" class="w-full accent-amber-600">
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-1">
+                <label class="text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Ukuran Isi Ucapan</label>
+                <span class="text-[10px] text-amber-500 font-mono" id="val-closing-body">16px</span>
+              </div>
+              <input type="range" id="closing-body" min="10" max="30" value="16" oninput="document.getElementById('val-closing-body').textContent=this.value+'px'; updateConfig('visual_configs.closing_section.body_size', parseInt(this.value))" class="w-full accent-amber-600">
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-1">
+                <label class="text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Ukuran Nama Mempelai</label>
+                <span class="text-[10px] text-amber-500 font-mono" id="val-closing-names">60px</span>
+              </div>
+              <input type="range" id="closing-names" min="20" max="120" value="60" oninput="document.getElementById('val-closing-names').textContent=this.value+'px'; updateConfig('visual_configs.closing_section.names_size', parseInt(this.value))" class="w-full accent-amber-600">
+            </div>
+          </div>
+
+          <!-- Content Spacing -->
+          <div class="space-y-4 mt-6">
+            <h4 class="text-xs uppercase tracking-widest text-amber-400/70 font-semibold mb-2">=== CONTENT SPACING ===</h4>
+            
+            <div>
+              <div class="flex justify-between mb-1">
+                <label class="text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Gap Judul → Isi</label>
+                <span class="text-[10px] text-amber-500 font-mono" id="val-closing-gap-title">24px</span>
+              </div>
+              <input type="range" id="closing-gap-title" min="0" max="100" value="24" oninput="document.getElementById('val-closing-gap-title').textContent=this.value+'px'; updateConfig('visual_configs.closing_section.gap_title_body', parseInt(this.value))" class="w-full accent-amber-600">
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-1">
+                <label class="text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Gap Isi → Salam</label>
+                <span class="text-[10px] text-amber-500 font-mono" id="val-closing-gap-body">24px</span>
+              </div>
+              <input type="range" id="closing-gap-body" min="0" max="100" value="24" oninput="document.getElementById('val-closing-gap-body').textContent=this.value+'px'; updateConfig('visual_configs.closing_section.gap_body_salam', parseInt(this.value))" class="w-full accent-amber-600">
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-1">
+                <label class="text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Gap Salam → Nama</label>
+                <span class="text-[10px] text-amber-500 font-mono" id="val-closing-gap-salam">16px</span>
+              </div>
+              <input type="range" id="closing-gap-salam" min="0" max="100" value="16" oninput="document.getElementById('val-closing-gap-salam').textContent=this.value+'px'; updateConfig('visual_configs.closing_section.gap_salam_names', parseInt(this.value))" class="w-full accent-amber-600">
+            </div>
+          </div>
+
+          <!-- Name Layout & Spacing -->
+          <div class="space-y-4 mt-6">
+            <h4 class="text-xs uppercase tracking-widest text-amber-400/70 font-semibold mb-2">=== NAME LAYOUT ===</h4>
+            
+            <div>
+              <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1.5 font-semibold">Susunan Nama Mempelai</label>
+              <select id="closing-names-layout" onchange="updateConfig('visual_configs.closing_section.names_layout', this.value)" class="w-full bg-stone-900 border border-stone-700 text-stone-200 rounded-lg px-3 py-2 text-sm focus:border-amber-500 outline-none">
+                <option value="inline" selected>1 Baris (Contoh: Rodu & Yeni)</option>
+                <option value="stacked">2 Baris (Contoh: Rodu \n&\n Yeni)</option>
+              </select>
+            </div>
+            
+            <div>
+              <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1.5 font-semibold">Posisi Teks Nama</label>
+              <select id="closing-names-align" onchange="updateConfig('visual_configs.closing_section.names_align', this.value)" class="w-full bg-stone-900 border border-stone-700 text-stone-200 rounded-lg px-3 py-2 text-sm focus:border-amber-500 outline-none">
+                <option value="left">Left</option>
+                <option value="center" selected>Center</option>
+                <option value="right">Right</option>
+              </select>
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-1">
+                <label class="text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Gap Antar Nama</label>
+                <span class="text-[10px] text-amber-500 font-mono" id="val-closing-gap-names">8px</span>
+              </div>
+              <input type="range" id="closing-gap-names" min="0" max="50" value="8" oninput="document.getElementById('val-closing-gap-names').textContent=this.value+'px'; updateConfig('visual_configs.closing_section.gap_names', parseInt(this.value))" class="w-full accent-amber-600">
+            </div>
+          </div>
+        </div>
+
+          <!-- === COVER CONTENT BUILDER === -->
+          <div class="panel-glass rounded-2xl p-6">
+            <h3 class="font-cinzel text-amber-500 text-base font-bold mb-4 flex items-center justify-between">
+              <span>Cover Content Builder</span>
+              <span class="bg-amber-500/20 text-amber-500 text-[10px] px-2 py-1 rounded-md">NEW</span>
+            </h3>
+            
+            <div class="space-y-4">
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Nama Tamu Placeholder</label>
+                <input type="text" id="cover-guest-placeholder" oninput="updateConfig('visual_configs.cover_content.guest_placeholder', this.value)" class="form-input text-sm" placeholder="di Tempat">
+              </div>
+
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Teks Tombol</label>
+                <input type="text" id="cover-btn-text" oninput="updateConfig('visual_configs.cover_content.btn_text', this.value)" class="form-input text-sm" placeholder="Buka Undangan">
+              </div>
+
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Icon Tombol</label>
+                <select id="cover-btn-icon" onchange="updateConfig('visual_configs.cover_content.btn_icon', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500">
+                  <option value="chevron_right">Chevron Right</option>
+                  <option value="arrow_right">Arrow Right</option>
+                  <option value="heart">Heart</option>
+                  <option value="ring">Ring</option>
+                  <option value="none">None</option>
+                </select>
+              </div>
+
+              <div class="flex items-center justify-between bg-[#181c19] border border-stone-800 rounded-xl p-3">
+                <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Tampilkan Tombol</label>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="cover-btn-visible" class="sr-only peer" onchange="updateConfig('visual_configs.cover_content.btn_visible', this.checked)">
+                  <div class="w-9 h-5 bg-stone-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+                </label>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1.5 font-semibold">Warna Tombol</label>
+                  <div class="flex items-center gap-2">
+                    <input type="color" id="cover-btn-color" oninput="document.getElementById('cover-btn-color-hex').textContent=this.value; updateConfig('visual_configs.cover_content.btn_color', this.value)" class="h-8 w-12 rounded bg-transparent cursor-pointer">
+                    <span class="text-xs text-stone-500 uppercase" id="cover-btn-color-hex">#C9A96E</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1.5 font-semibold">Warna Teks Tombol</label>
+                  <div class="flex items-center gap-2">
+                    <input type="color" id="cover-btn-text-color" oninput="document.getElementById('cover-btn-text-color-hex').textContent=this.value; updateConfig('visual_configs.cover_content.btn_text_color', this.value)" class="h-8 w-12 rounded bg-transparent cursor-pointer">
+                    <span class="text-xs text-stone-500 uppercase" id="cover-btn-text-color-hex">#FFFFFF</span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1.5">
+                  <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Radius Tombol</label>
+                  <span class="text-[10px] text-amber-500 font-mono" id="val-cover-btn-radius">9999px</span>
+                </div>
+                <input type="range" id="cover-btn-radius" min="0" max="50" value="50" oninput="document.getElementById('val-cover-btn-radius').textContent=(this.value==50?'9999':this.value)+'px'; updateConfig('visual_configs.cover_content.btn_radius', this.value==50?9999:parseInt(this.value))" class="w-full accent-amber-600">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1.5">
+                  <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Lebar Tombol</label>
+                  <span class="text-[10px] text-amber-500 font-mono" id="val-cover-btn-width">200px</span>
+                </div>
+                <input type="range" id="cover-btn-width" min="120" max="350" value="200" oninput="document.getElementById('val-cover-btn-width').textContent=this.value+'px'; updateConfig('visual_configs.cover_content.btn_width', parseInt(this.value))" class="w-full accent-amber-600">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1.5">
+                  <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Tinggi Tombol</label>
+                  <span class="text-[10px] text-amber-500 font-mono" id="val-cover-btn-height">44px</span>
+                </div>
+                <input type="range" id="cover-btn-height" min="32" max="64" value="44" oninput="document.getElementById('val-cover-btn-height').textContent=this.value+'px'; updateConfig('visual_configs.cover_content.btn_height', parseInt(this.value))" class="w-full accent-amber-600">
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-stone-900/50 p-4 rounded-2xl border border-stone-800">
+            <h3 class="text-xs font-bold text-amber-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/></svg>
+              Cover Spacing & Typography
+            </h3>
+            
+            <div class="space-y-4">
+              <!-- Label Title Size & Spacing -->
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <div class="flex justify-between items-center mb-1.5">
+                    <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Ukuran Label</label>
+                    <span class="text-[10px] text-amber-500 font-mono" id="val-cover-label-size">16px</span>
+                  </div>
+                  <input type="range" id="cover-label-size" min="10" max="32" value="16" oninput="document.getElementById('val-cover-label-size').textContent=this.value+'px'; updateConfig('visual_configs.size_cover_title', parseInt(this.value))" class="w-full accent-amber-600">
+                </div>
+                <div>
+                  <div class="flex justify-between items-center mb-1.5">
+                    <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Spasi Huruf</label>
+                    <span class="text-[10px] text-amber-500 font-mono" id="val-cover-label-space">0.18em</span>
+                  </div>
+                  <input type="range" id="cover-label-space" min="0" max="0.5" step="0.01" value="0.18" oninput="document.getElementById('val-cover-label-space').textContent=this.value+'em'; updateConfig('visual_configs.letter_spacing_cover_title', parseFloat(this.value))" class="w-full accent-amber-600">
+                </div>
+              </div>
+
+              <!-- Gaps -->
+              <div>
+                <div class="flex justify-between items-center mb-1.5">
+                  <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Gap Label → Nama</label>
+                  <span class="text-[10px] text-amber-500 font-mono" id="val-cover-space-label">24px</span>
+                </div>
+                <input type="range" id="cover-space-label" min="0" max="80" value="24" oninput="document.getElementById('val-cover-space-label').textContent=this.value+'px'; updateConfig('visual_configs.cover_spacing.label_to_names', parseInt(this.value))" class="w-full accent-amber-600">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1.5">
+                  <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Gap Sapaan → Placeholder</label>
+                  <span class="text-[10px] text-amber-500 font-mono" id="val-cover-space-greeting">4px</span>
+                </div>
+                <input type="range" id="cover-space-greeting" min="0" max="80" value="4" oninput="document.getElementById('val-cover-space-greeting').textContent=this.value+'px'; updateConfig('visual_configs.cover_spacing.greeting_to_guest', parseInt(this.value))" class="w-full accent-amber-600">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1.5">
+                  <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Gap Placeholder → Tombol</label>
+                  <span class="text-[10px] text-amber-500 font-mono" id="val-cover-space-guest">24px</span>
+                </div>
+                <input type="range" id="cover-space-guest" min="0" max="80" value="24" oninput="document.getElementById('val-cover-space-guest').textContent=this.value+'px'; updateConfig('visual_configs.cover_spacing.guest_to_button', parseInt(this.value))" class="w-full accent-amber-600">
+              </div>
+            </div>
+          </div>
+        <!-- ============ TAB: MEMPELAI ============ -->
+        <div id="content-mempelai" class="tab-content hidden space-y-4">
+          <!-- Template Sapaan Tamu -->
+          <div class="panel-glass rounded-2xl p-6">
+            <div class="mb-2">
+              <label class="block text-[10px] uppercase tracking-widest text-amber-400/70 mb-1.5 font-semibold">Template Sapaan Tamu</label>
+              <input type="text" id="greeting-template" value="Kepada Yth. Bapak/Ibu/Sdr/i" oninput="updateConfig('subject_identity.guest_greeting_template', this.value)" class="w-full bg-[#181c19] border border-stone-800 text-stone-250 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500 outline-none" placeholder="Kepada Yth. Bapak/Ibu/Sdr/i">
+            </div>
+          </div>
+
+          <!-- Groom Form -->
+          <div class="panel-glass rounded-2xl p-6">
+            <h3 class="font-cinzel text-amber-500 text-base font-bold mb-4">Detail Mempelai Pria (Groom)</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Nama Panggilan</label>
+                <input type="text" id="groom-nick" oninput="updateConfig('subject_identity.groom.nickname', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all">
+              </div>
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Nama Lengkap & Gelar</label>
+                <input type="text" id="groom-full" oninput="updateConfig('subject_identity.groom.full_name', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all">
+              </div>
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Nama Ayah</label>
+                <input type="text" id="groom-father" oninput="updateConfig('subject_identity.groom.father_name', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all">
+              </div>
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Nama Ibu</label>
+                <input type="text" id="groom-mother" oninput="updateConfig('subject_identity.groom.mother_name', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all">
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Bio Singkat</label>
+                <input type="text" id="groom-bio-input" oninput="updateConfig('subject_identity.groom.bio', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all">
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Foto Profil Mempelai Pria</label>
+                <div class="flex items-center gap-3">
+                  <input type="file" id="groom-photo-upload" accept="image/*" onchange="uploadProfilePhoto('groom', this)" class="hidden">
+                  <button type="button" onclick="document.getElementById('groom-photo-upload').click()" class="bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-semibold py-2.5 px-4 rounded-xl transition-all shadow-md">Pilih Foto</button>
+                  <div id="groom-photo-preview-wrap" class="w-10 h-10 rounded-lg bg-[#181c19] border border-stone-800 overflow-hidden flex items-center justify-center">
+                    <span class="text-stone-500 text-[10px]">Kosong</span>
+                  </div>
+                  <button type="button" onclick="clearProfilePhoto('groom')" class="text-red-500 hover:text-red-600 text-xs font-semibold">Hapus</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bride Form -->
+          <div class="panel-glass rounded-2xl p-6">
+            <h3 class="font-cinzel text-amber-500 text-base font-bold mb-4">Detail Mempelai Wanita (Bride)</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Nama Panggilan</label>
+                <input type="text" id="bride-nick" oninput="updateConfig('subject_identity.bride.nickname', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all">
+              </div>
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Nama Lengkap & Gelar</label>
+                <input type="text" id="bride-full" oninput="updateConfig('subject_identity.bride.full_name', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all">
+              </div>
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Nama Ayah</label>
+                <input type="text" id="bride-father" oninput="updateConfig('subject_identity.bride.father_name', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all">
+              </div>
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Nama Ibu</label>
+                <input type="text" id="bride-mother" oninput="updateConfig('subject_identity.bride.mother_name', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all">
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Bio Singkat</label>
+                <input type="text" id="bride-bio-input" oninput="updateConfig('subject_identity.bride.bio', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all">
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Foto Profil Mempelai Wanita</label>
+                <div class="flex items-center gap-3">
+                  <input type="file" id="bride-photo-upload" accept="image/*" onchange="uploadProfilePhoto('bride', this)" class="hidden">
+                  <button type="button" onclick="document.getElementById('bride-photo-upload').click()" class="bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-semibold py-2.5 px-4 rounded-xl transition-all shadow-md">Pilih Foto</button>
+                  <div id="bride-photo-preview-wrap" class="w-10 h-10 rounded-lg bg-[#181c19] border border-stone-800 overflow-hidden flex items-center justify-center">
+                    <span class="text-stone-500 text-[10px]">Kosong</span>
+                  </div>
+                  <button type="button" onclick="clearProfilePhoto('bride')" class="text-red-500 hover:text-red-600 text-xs font-semibold">Hapus</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ TAB: ACARA ============ -->
+        <div id="content-acara" class="tab-content hidden space-y-4">
+          <!-- === ACARA CONTENT BUILDER === -->
+          <div class="panel-glass rounded-2xl p-6">
+            <h3 class="font-cinzel text-amber-500 text-base font-bold mb-4 flex items-center justify-between">
+              <span>Acara Content Builder</span>
+              <span class="bg-amber-500/20 text-amber-500 text-[10px] px-2 py-1 rounded-md">NEW</span>
+            </h3>
+            
+            <div class="space-y-4">
+              <!-- Section Title & Subtitle -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Judul Section</label>
+                  <input type="text" id="acara-section-title" oninput="updateConfig('visual_configs.acara_content.section_title', this.value)" class="form-input text-sm" placeholder="Detail Acara">
+                </div>
+                <div>
+                  <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Sub Judul</label>
+                  <input type="text" id="acara-section-subtitle" oninput="updateConfig('visual_configs.acara_content.section_subtitle', this.value)" class="form-input text-sm" placeholder="Opsional">
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex items-center justify-between bg-[#181c19] border border-stone-800 rounded-xl p-3">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Tampilkan Judul</label>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="acara-show-title" class="sr-only peer" onchange="updateConfig('visual_configs.acara_content.show_section_title', this.checked)">
+                    <div class="w-9 h-5 bg-stone-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+                  </label>
+                </div>
+                <div class="flex items-center justify-between bg-[#181c19] border border-stone-800 rounded-xl p-3">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Tampilkan Sub Judul</label>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="acara-show-subtitle" class="sr-only peer" onchange="updateConfig('visual_configs.acara_content.show_section_subtitle', this.checked)">
+                    <div class="w-9 h-5 bg-stone-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+                  </label>
+                </div>
+              </div>
+
+              <hr class="border-stone-800 my-4">
+
+              <!-- Akad & Resepsi Labels -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Label Akad</label>
+                  <input type="text" id="acara-akad-label" oninput="updateConfig('visual_configs.acara_content.akad_label', this.value)" class="form-input text-sm" placeholder="Akad Nikah">
+                </div>
+                <div class="flex items-center justify-between bg-[#181c19] border border-stone-800 rounded-xl p-3 mt-auto">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Tampilkan Akad</label>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="acara-show-akad" class="sr-only peer" onchange="updateConfig('visual_configs.acara_content.show_akad', this.checked); checkAcaraWarning();">
+                    <div class="w-9 h-5 bg-stone-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+                  </label>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Label Resepsi</label>
+                  <input type="text" id="acara-resepsi-label" oninput="updateConfig('visual_configs.acara_content.resepsi_label', this.value)" class="form-input text-sm" placeholder="Resepsi">
+                </div>
+                <div class="flex items-center justify-between bg-[#181c19] border border-stone-800 rounded-xl p-3 mt-auto">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Tampilkan Resepsi</label>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="acara-show-resepsi" class="sr-only peer" onchange="updateConfig('visual_configs.acara_content.show_resepsi', this.checked); checkAcaraWarning();">
+                    <div class="w-9 h-5 bg-stone-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+                  </label>
+                </div>
+              </div>
+
+              <hr class="border-stone-800 my-4">
+
+                            <!-- Warning Banner -->
+              <div id="acara-hidden-warning" class="hidden mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold flex items-start gap-3">
+                <svg class="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <div>
+                  <p class="mb-1">Semua acara disembunyikan.</p>
+                  <p class="font-normal opacity-80">Section Acara akan dimatikan otomatis.</p>
+                </div>
+              </div>
+              <!-- Buttons -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Teks Tombol Maps</label>
+                  <input type="text" id="acara-maps-btn-text" oninput="updateConfig('visual_configs.acara_content.maps_button_text', this.value)" class="form-input text-sm" placeholder="Lihat Lokasi">
+                </div>
+                <div class="flex items-center justify-between bg-[#181c19] border border-stone-800 rounded-xl p-3 mt-auto">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Tampilkan Maps</label>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="acara-show-maps-btn" class="sr-only peer" onchange="updateConfig('visual_configs.acara_content.maps_button_visible', this.checked)">
+                    <div class="w-9 h-5 bg-stone-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+                  </label>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Teks Tombol Kalender</label>
+                  <input type="text" id="acara-cal-btn-text" oninput="updateConfig('visual_configs.acara_content.calendar_button_text', this.value)" class="form-input text-sm" placeholder="Kalender">
+                </div>
+                <div class="flex items-center justify-between bg-[#181c19] border border-stone-800 rounded-xl p-3 mt-auto">
+                  <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Tampilkan Kalender</label>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="acara-show-cal-btn" class="sr-only peer" onchange="updateConfig('visual_configs.acara_content.calendar_button_visible', this.checked)">
+                    <div class="w-9 h-5 bg-stone-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Akad Nikah Form -->
+          <div class="panel-glass rounded-2xl p-6">
+            <h3 class="font-cinzel text-amber-500 text-base font-bold mb-4">Detail Akad Nikah</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Tanggal Acara</label>
+                <input type="date" id="akad-date" oninput="updateConfig('event_details.akad.date', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all">
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Jam Mulai</label>
+                  <input type="text" id="akad-start" oninput="updateConfig('event_details.akad.time_start', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-3 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all" placeholder="10:00">
+                </div>
+                <div>
+                  <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Jam Selesai</label>
+                  <input type="text" id="akad-end" oninput="updateConfig('event_details.akad.time_end', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-3 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all" placeholder="12:00">
+                </div>
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Nama Venue</label>
+                <input type="text" id="akad-venue-name" oninput="updateConfig('event_details.akad.venue_name', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all">
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Alamat Venue</label>
+                <input type="text" id="akad-address-input" oninput="updateConfig('event_details.akad.venue_address', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all">
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Link Google Maps</label>
+                <input type="text" id="akad-maps" oninput="updateConfig('event_details.akad.maps_url', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all" placeholder="https://maps.google.com/?q=...">
+              </div>
+            </div>
+          </div>
+
+          <!-- Resepsi Form -->
+          <div class="panel-glass rounded-2xl p-6">
+            <h3 class="font-cinzel text-amber-500 text-base font-bold mb-4">Detail Resepsi</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Tanggal Acara</label>
+                <input type="date" id="resepsi-date" oninput="updateConfig('event_details.resepsi.date', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all">
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Jam Mulai</label>
+                  <input type="text" id="resepsi-start" oninput="updateConfig('event_details.resepsi.time_start', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-3 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all" placeholder="12:00">
+                </div>
+                <div>
+                  <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Jam Selesai</label>
+                  <input type="text" id="resepsi-end" oninput="updateConfig('event_details.resepsi.time_end', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-3 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all" placeholder="Selesai">
+                </div>
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Nama Venue</label>
+                <input type="text" id="resepsi-venue-name" oninput="updateConfig('event_details.resepsi.venue_name', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all">
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Alamat Venue</label>
+                <input type="text" id="resepsi-address-input" oninput="updateConfig('event_details.resepsi.venue_address', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all">
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Link Google Maps</label>
+                <input type="text" id="resepsi-maps" oninput="updateConfig('event_details.resepsi.maps_url', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all" placeholder="https://maps.google.com/?q=...">
+              </div>
+            </div>
+          </div>
+
+          <!-- Countdown Target Form -->
+          <div class="panel-glass rounded-2xl p-6">
+            <h3 class="font-cinzel text-amber-500 text-base font-bold mb-4">Target Countdown Timer</h3>
+            <div>
+              <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Countdown Waktu Hari H (ISO Format)</label>
+              <input type="text" id="countdown-target" oninput="updateConfig('event_details.countdown_target', this.value)" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all" placeholder="2026-10-31T10:00:00">
+              <span class="text-[10px] text-stone-500 mt-1 block">Gunakan format standar ISO: YYYY-MM-DDThh:mm:ss</span>
+            </div>
+          </div>
+        </div>
+
+          <!-- === COUNTDOWN CONTENT BUILDER === -->
+          <div class="panel-glass rounded-2xl p-6">
+            <h3 class="font-cinzel text-amber-500 text-base font-bold mb-4 flex items-center justify-between">
+              <span>Countdown Builder</span>
+              <span class="bg-amber-500/20 text-amber-500 text-[10px] px-2 py-1 rounded-md">NEW</span>
+            </h3>
+            
+            <div class="space-y-4">
+              <div class="flex items-center justify-between bg-[#181c19] border border-stone-800 rounded-xl p-3">
+                <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Tampilkan Judul</label>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="count-show-title" class="sr-only peer" onchange="updateConfig('visual_configs.countdown_content.show_title', this.checked)">
+                  <div class="w-9 h-5 bg-stone-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+                </label>
+              </div>
+
+              <div class="flex items-center justify-between bg-[#181c19] border border-stone-800 rounded-xl p-3">
+                <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Tampilkan Sub Judul / Tanggal</label>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="count-show-subtitle" class="sr-only peer" onchange="updateConfig('visual_configs.countdown_content.show_subtitle', this.checked)">
+                  <div class="w-9 h-5 bg-stone-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+                </label>
+              </div>
+
+              <div class="flex items-center justify-between bg-[#181c19] border border-stone-800 rounded-xl p-3">
+                <label class="text-[11px] uppercase tracking-wider font-semibold text-stone-400">Tampilkan Timer</label>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="count-show-timer" class="sr-only peer" onchange="updateConfig('visual_configs.countdown_content.show_countdown', this.checked)">
+                  <div class="w-9 h-5 bg-stone-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+                </label>
+              </div>
+
+              <div class="grid grid-cols-3 gap-2">
+                <div>
+                  <label class="block text-[9px] uppercase tracking-widest text-stone-400 mb-1 font-semibold">Warna Card</label>
+                  <input type="color" id="count-card-color" oninput="updateConfig('visual_configs.countdown_content.card_color', this.value)" class="h-8 w-full rounded bg-transparent cursor-pointer">
+                </div>
+                <div>
+                  <label class="block text-[9px] uppercase tracking-widest text-stone-400 mb-1 font-semibold">Warna Angka</label>
+                  <input type="color" id="count-number-color" oninput="updateConfig('visual_configs.countdown_content.number_color', this.value)" class="h-8 w-full rounded bg-transparent cursor-pointer">
+                </div>
+                <div>
+                  <label class="block text-[9px] uppercase tracking-widest text-stone-400 mb-1 font-semibold">Warna Label</label>
+                  <input type="color" id="count-label-color" oninput="updateConfig('visual_configs.countdown_content.label_color', this.value)" class="h-8 w-full rounded bg-transparent cursor-pointer">
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1.5">
+                  <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Radius Card</label>
+                  <span class="text-[10px] text-amber-500 font-mono" id="val-count-radius">16px</span>
+                </div>
+                <input type="range" id="count-radius" min="0" max="32" value="16" oninput="document.getElementById('val-count-radius').textContent=this.value+'px'; updateConfig('visual_configs.countdown_content.card_radius', parseInt(this.value))" class="w-full accent-amber-600">
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1.5">
+                  <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-semibold">Lebar Card</label>
+                  <span class="text-[10px] text-amber-500 font-mono" id="val-count-width">384px</span>
+                </div>
+                <input type="range" id="count-width" min="200" max="500" value="384" oninput="document.getElementById('val-count-width').textContent=this.value+'px'; updateConfig('visual_configs.countdown_content.card_width', parseInt(this.value))" class="w-full accent-amber-600">
+              </div>
+
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Posisi Alignment</label>
+                <div class="flex bg-[#181c19] border border-stone-800 rounded-lg p-1">
+                  <button type="button" id="count-align-left" class="flex-1 py-1.5 rounded-md text-xs font-semibold text-stone-400 hover:text-amber-500 transition-colors" onclick="setCountAlign('left')">Left</button>
+                  <button type="button" id="count-align-center" class="flex-1 py-1.5 rounded-md text-xs font-semibold bg-amber-500/20 text-amber-500 transition-colors" onclick="setCountAlign('center')">Center</button>
+                  <button type="button" id="count-align-right" class="flex-1 py-1.5 rounded-md text-xs font-semibold text-stone-400 hover:text-amber-500 transition-colors" onclick="setCountAlign('right')">Right</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <!-- ============ TAB: CERITA CINTA ============ -->
+        <div id="content-cerita" class="tab-content hidden space-y-4">
+          <div class="panel-glass rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-4 border-b border-stone-800 pb-3">
+              <h3 class="font-cinzel text-amber-500 text-base font-bold">Lini Masa Cerita Cinta</h3>
+              <button onclick="addLoveStoryItem()" class="bg-amber-500 hover:bg-amber-600 text-[#141716] font-bold text-xs px-3 py-1.5 rounded-lg transition-all flex items-center gap-1">+ Tambah Cerita</button>
+            </div>
+            
+            <div id="love-story-editor-list" class="space-y-4">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ TAB: KADO DIGITAL ============ -->
+        <div id="content-kado" class="tab-content hidden space-y-4">
+          <div class="panel-glass rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-4 border-b border-stone-800 pb-3">
+              <h3 class="font-cinzel text-amber-500 text-base font-bold">Daftar Rekening Bank & E-Wallet</h3>
+              <button onclick="addGiftItem()" class="bg-amber-500 hover:bg-amber-600 text-[#141716] font-bold text-xs px-3 py-1.5 rounded-lg transition-all flex items-center gap-1">+ Tambah Donasi</button>
+            </div>
+            
+            <div id="gift-editor-list" class="space-y-4">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <div class="panel-glass rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-4 border-b border-stone-800 pb-3">
+              <h3 class="font-cinzel text-amber-500 text-base font-bold">Daftar Keinginan (Wishlist Kado Barang)</h3>
+              <button onclick="addWishlistItem()" class="bg-amber-500 hover:bg-amber-600 text-[#141716] font-bold text-xs px-3 py-1.5 rounded-lg transition-all flex items-center gap-1">+ Tambah Wishlist</button>
+            </div>
+            
+            <div id="wishlist-editor-list" class="space-y-4">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ TAB: KELUARGA ============ -->
+        <div id="content-keluarga" class="tab-content hidden space-y-4">
+          <div class="panel-glass rounded-2xl p-6">
+            <h3 class="font-cinzel text-amber-500 text-base font-bold mb-4 border-b border-stone-800 pb-3">Daftar Turut Mengundang</h3>
+            
+            <div class="space-y-4">
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Kel. Mempelai Pria (Satu baris per nama)</label>
+                <textarea id="family-groom-textarea" oninput="updateFamilyList('groom')" rows="6" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm font-mono text-stone-200 focus:outline-none focus:border-amber-500 transition-all"></textarea>
+              </div>
+              
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Kel. Mempelai Wanita (Satu baris per nama)</label>
+                <textarea id="family-bride-textarea" oninput="updateFamilyList('bride')" rows="6" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm font-mono text-stone-200 focus:outline-none focus:border-amber-500 transition-all"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ TAB: RSVP ============ -->
+        <div id="content-rsvp" class="tab-content hidden space-y-4">
+          <div class="panel-glass rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-4 border-b border-stone-800 pb-3">
+              <h3 class="font-cinzel text-amber-500 text-base font-bold">Data Konfirmasi RSVP Tamu</h3>
+              <div class="flex gap-2">
+                <button onclick="exportRSVPtoCSV()" class="bg-emerald-650 hover:bg-emerald-700 text-white text-xs px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 font-bold">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                  Export CSV
+                </button>
+                <button onclick="loadRSVPAndMessagesData()" class="bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs px-3 py-1.5 rounded-lg transition-all flex items-center gap-1">↻ Refresh Data</button>
+              </div>
+            </div>
+            
+            <div class="overflow-x-auto custom-scroll">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="border-b border-stone-800 text-stone-400">
+                    <th class="py-2.5 px-3">Nama Tamu</th>
+                    <th class="py-2.5 px-3">Kehadiran</th>
+                    <th class="py-2.5 px-3">Pax</th>
+                    <th class="py-2.5 px-3">Pesan RSVP</th>
+                  </tr>
+                </thead>
+                <tbody id="cms-rsvp-table-body" class="text-stone-300 divide-y divide-stone-800/40">
+                  <!-- Rendered by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel-glass rounded-2xl p-6">
+            <h3 class="font-cinzel text-amber-500 text-base font-bold mb-4 border-b border-stone-800 pb-3">Daftar Buku Tamu (Ucapan & Doa)</h3>
+            <div id="cms-messages-moderation-list" class="space-y-3">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ TAB: SHARE ============ -->
+        <div id="content-share" class="tab-content hidden space-y-6">
+          <!-- Single Guest Panel -->
+          <div id="share-single-panel" class="panel-glass rounded-2xl p-6 space-y-4">
+            <h3 class="font-cinzel text-amber-500 text-base font-bold">Pembuat Link Sapaan Tamu Personal</h3>
+            <p class="text-stone-400 text-xs">Buat link khusus yang secara otomatis menyapa nama tamu di halaman cover saat undangan dibuka.</p>
+            
+            <div class="space-y-4">
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">Nama Tamu</label>
+                <input type="text" id="share-guest-name" oninput="generateShareLink()" class="w-full bg-[#181c19] border border-stone-800 rounded-xl px-4 py-2.5 text-sm text-stone-200 focus:outline-none focus:border-amber-500 transition-all" placeholder="Masukkan nama tamu, misal: Budi Santoso">
+              </div>
+              
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-stone-400 mb-1.5">URL Undangan yang Tergenerate</label>
+                <div class="flex gap-2">
+                  <input type="text" id="share-generated-url" readonly class="flex-1 bg-[#0e1110] border border-stone-850 rounded-xl px-4 py-2.5 text-xs text-amber-400 focus:outline-none" value="">
+                  <button type="button" onclick="copyGeneratedShareLink(this)" class="bg-amber-500 hover:bg-amber-600 text-[#141716] font-bold text-xs px-4 py-2.5 rounded-xl transition-all shadow-md">Salin Link</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: PHONE PREVIEW (cols 5) -->
+    <div class="lg:col-span-5 flex flex-col justify-center items-center h-full bg-[#0e1110] border border-stone-800/40 rounded-2xl p-4">
+      <div class="text-center mb-3">
+        <span class="text-[10px] uppercase font-bold tracking-widest text-stone-500">Live Preview Smartphone Mockup</span>
+      </div>
+      
+      <!-- Phone Mockup Frame -->
+      <div class="phone-mockup">
+        <iframe id="preview-frame" src="index.html?preview=mobile" class="w-full h-full border-none"></iframe>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Config State - Loaded from localState or defaults
+    let configState = {
+      id: "default-id",
+      slug: "rodu-dan-yeni",
+      is_published: true,
+      subject_identity: {
+        groom: {
+          full_name: "Rodu Nuryanto",
+          nickname: "Rodu",
+          father_name: "Ayah Rodu",
+          mother_name: "Ibu Rodu",
+          bio: "Mempelai Pria",
+          photo_url: ""
+        },
+        bride: {
+          full_name: "Yeni Sukma Dewi",
+          nickname: "Yeni",
+          father_name: "Ayah Yeni",
+          mother_name: "Ibu Yeni",
+          bio: "Mempelai Wanita",
+          photo_url: ""
+        },
+        guest_greeting_template: "Kepada Yth. Bapak/Ibu/Sdr/i"
+      },
+      event_details: {
+        akad: {
+          date: "2026-06-14",
+          time_start: "10:00",
+          time_end: "Selesai",
+          venue_name: "Kediaman Mempelai Wanita",
+          venue_address: "Kp. Bedeng Rt.008/004 Desa Gobang, Gang. Masjid Al - Mazahim Sebelum Perumahan",
+          maps_url: "https://maps.google.com",
+          maps_embed_url: ""
+        },
+        resepsi: {
+          date: "2026-06-14",
+          time_start: "10:00",
+          time_end: "Selesai",
+          venue_name: "Kediaman Mempelai Wanita",
+          venue_address: "Kp. Bedeng Rt.008/004 Desa Gobang, Gang. Masjid Al - Mazahim Sebelum Perumahan",
+          maps_url: "https://maps.google.com",
+          maps_embed_url: ""
+        },
+        countdown_target: "2026-06-14T10:00:00"
+      },
+      visual_configs: {
+        theme_id: "watercolor_green",
+        primary_color: "#C9A96E",
+        secondary_color: "#FAF7F2",
+        font_heading: "Cormorant Garamond",
+        font_body: "DM Sans",
+        animated_bg: {
+          type: "falling_leaves",
+          intensity: "medium"
+        },
+        font_color_names: "#C9A96E",
+        font_color_headings: "#C9A96E",
+        font_color_body: "#2C3E2B",
+        font_size_names_cover: 80,
+        font_size_names_body: 45,
+        font_size_headings: 48,
+        font_size_body: 14,
+        size_floral_corner: 250,
+        size_floral_divider: 200,
+        size_avatar: 160,
+        text_cover_title: "Undangan Pernikahan",
+        text_hero_title: "Save The Date",
+        color_cover_title: "#78716c",
+        size_cover_title: 16,
+        letter_spacing_cover_title: 0.18,
+        color_hero_title: "#2c3e2b",
+        size_hero_title: 12,
+        shadow_blur: 0,
+        shadow_color: "#000000",
+        letter_spacing_headings: 0,
+        letter_spacing_body: 0,
+        names_line_height: 1.1,
+        names_stroke_width: 0,
+        names_stroke_color: "#000000",
+        headings_stroke_width: 0,
+        headings_stroke_color: "#000000",
+        body_stroke_width: 0,
+        body_stroke_color: "#000000",
+        cover_title_stroke_width: 0,
+        cover_title_stroke_color: "#000000",
+        hero_title_stroke_width: 0,
+        hero_title_stroke_color: "#000000",
+        closing_section: {
+          enabled: true,
+          card_width: 500,
+          card_padding: 32,
+          border_radius: 30,
+          opacity: 90,
+          blur: 10,
+          shadow: 12,
+          margin_top: 40,
+          margin_bottom: 220,
+          safe_bottom: 220,
+          align: "center",
+          text_align: "center",
+          title_size: 20,
+          body_size: 16,
+          names_size: 60,
+          gap_title_body: 24,
+          gap_body_salam: 24,
+          gap_salam_names: 16,
+          names_layout: "inline",
+          names_align: "center",
+          gap_names: 8
+        }
+      },
+      love_story: [
+        {
+          date: "Januari, 2023",
+          title: "Kenalan",
+          description: "Kita pertama kali bertemu di acara teman, saling lempar senyum dan mulai bertukar cerita.",
+          photo_url: ""
+        },
+        {
+          date: "Maret, 2024",
+          title: "Pernyataan Cinta",
+          description: "Setelah setahun dekat, akhirnya kami berkomitmen untuk melangkah ke jenjang yang lebih serius.",
+          photo_url: ""
+        },
+        {
+          date: "Januari, 2025",
+          title: "Lamaran",
+          description: "Di hadapan kedua keluarga besar, kami meresmikan ikatan pertunangan kami.",
+          photo_url: ""
+        },
+        {
+          date: "Oktober, 2026",
+          title: "Pernikahan",
+          description: "Hari bersejarah kami dimulai. Lembaran baru kehidupan pernikahan kami yang penuh berkah.",
+          photo_url: ""
+        }
+      ],
+      turut_mengundang: {
+        groom_family: [
+          "Kel. Bapak Ucok S,H",
+          "Kel. Bapak Lorem S,Th",
+          "Kel. Ibu D Liam Alexander",
+          "Kel. Bapak Olivia Jade S,E",
+          "Kel. Noah James",
+          "Kel. Sophia Violet",
+          "Kel. Lucas Benjamin",
+          "Kel. Besar Ava Harper",
+          "Kel. Besar Amelia Grace / Roy"
+        ],
+        bride_family: [
+          "Kel. Sarah Anderson, S.E., M.Sc.",
+          "Kel. Michael Collins, S.Psi., M.Psi."
+        ]
+      },
+      gifts: {
+        bank_accounts: [
+          { bank: "BCA", number: "1234567890", name: "Rodu Nuryanto" }
+        ],
+        ewallets: [
+          { provider: "GoPay", number: "08123456789", name: "Yeni Sukma" }
+        ],
+        wishlist: [
+          { item_name: "Panci Set Premium", notes: "Merk Stein Cookware" },
+          { item_name: "Air Fryer", notes: "Warna putih / pastel" }
+        ]
+      },
+      media_assets: {
+        audio: {
+          url: "assets/audio/wedding-piano.mp3",
+          title: "Wedding Piano"
+        }
+      }
+    };
+
+    // Tab switcher
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById('content-' + tabId).classList.remove('hidden');
+      
+      document.querySelectorAll('[id^="tab-"]').forEach(el => el.classList.remove('active-tab'));
+      document.getElementById('tab-' + tabId).classList.add('active-tab');
+      
+      if (tabId === 'rsvp') {
+        loadRSVPAndMessagesData();
+      }
+    }
+
+    // Load Credentials and configurations on mount
+    window.addEventListener('DOMContentLoaded', () => {
+      // Restore credentials
+      document.getElementById('db-url').value = localStorage.getItem('supabase_url') || 'https://fmgotefjeiuemkbhgjbt.supabase.co';
+      document.getElementById('db-key').value = localStorage.getItem('supabase_key') || 'sb_publishable_kSO_uZOk7izW5aBNM-OrjQ_MTr_f2Y4';
+      
+      // Load saved state if any
+      const savedConfig = localStorage.getItem('wedding_config_state');
+      if (savedConfig) {
+        try {
+          const parsed = JSON.parse(savedConfig);
+          // If it contains the old dummy template names, let's reset it to the new defaults
+          if (parsed.subject_identity && (parsed.subject_identity.groom.nickname === "Andy" || parsed.subject_identity.groom.nickname === "Rodi" || parsed.subject_identity.bride.nickname === "Mawar")) {
+            console.log("Resetting outdated dummy template config from localStorage.");
+            localStorage.removeItem('wedding_config_state');
+          } else {
+            configState = parsed;
+          }
+        } catch (e) {
+          console.error("Error reading saved config state:", e);
+        }
+      }
+      
+      // Bind Visual Settings
+      const vis = configState.visual_configs;
+      if (vis) {
+        // Colors
+        document.getElementById('visual-color-names').value = vis.font_color_names || '#C9A96E';
+        document.getElementById('visual-color-names-hex').value = vis.font_color_names || '#C9A96E';
+        document.getElementById('visual-color-headings').value = vis.font_color_headings || '#C9A96E';
+        document.getElementById('visual-color-headings-hex').value = vis.font_color_headings || '#C9A96E';
+        document.getElementById('visual-color-body').value = vis.font_color_body || '#2C3E2B';
+        document.getElementById('visual-color-body-hex').value = vis.font_color_body || '#2C3E2B';
+        
+        // Sizes & Sliders
+        document.getElementById('visual-size-names-cover').value = vis.font_size_names_cover || 80;
+        document.getElementById('visual-size-names-cover-val').textContent = (vis.font_size_names_cover || 80) + 'px';
+        
+        document.getElementById('visual-size-names-body').value = vis.font_size_names_body || 45;
+        document.getElementById('visual-size-names-body-val').textContent = (vis.font_size_names_body || 45) + 'px';
+        
+        document.getElementById('visual-size-headings').value = vis.font_size_headings || 48;
+        document.getElementById('visual-size-headings-val').textContent = (vis.font_size_headings || 48) + 'px';
+        
+        document.getElementById('visual-size-body').value = vis.font_size_body || 14;
+        document.getElementById('visual-size-body-val').textContent = (vis.font_size_body || 14) + 'px';
+        
+        document.getElementById('visual-size-floral-corner').value = vis.size_floral_corner || 250;
+        document.getElementById('visual-size-floral-corner-val').textContent = (vis.size_floral_corner || 250) + 'px';
+        
+        document.getElementById('visual-size-floral-divider').value = vis.size_floral_divider || 200;
+        document.getElementById('visual-size-floral-divider-val').textContent = (vis.size_floral_divider || 200) + 'px';
+        
+        document.getElementById('visual-size-avatar').value = vis.size_avatar || 160;
+        document.getElementById('visual-size-avatar-val').textContent = (vis.size_avatar || 160) + 'px';
+        
+        // Text Labels & Sliders & Colors
+        document.getElementById('visual-text-cover-title').value = vis.text_cover_title || "Undangan Pernikahan";
+        document.getElementById('visual-text-hero-title').value = vis.text_hero_title || "Save The Date";
+        
+        document.getElementById('visual-color-cover-title').value = vis.color_cover_title || '#78716c';
+        document.getElementById('visual-color-cover-title-hex').value = vis.color_cover_title || '#78716c';
+        document.getElementById('visual-color-hero-title').value = vis.color_hero_title || '#2c3e2b';
+        document.getElementById('visual-color-hero-title-hex').value = vis.color_hero_title || '#2c3e2b';
+        
+
+        document.getElementById('visual-size-hero-title').value = vis.size_hero_title || 12;
+        document.getElementById('visual-size-hero-title-val').textContent = (vis.size_hero_title || 12) + 'px';
+        
+        // Spacing & Shadow Bindings
+        document.getElementById('visual-color-shadow').value = vis.shadow_color || '#000000';
+        document.getElementById('visual-color-shadow-hex').value = vis.shadow_color || '#000000';
+        
+        document.getElementById('visual-shadow-blur').value = vis.shadow_blur || 0;
+        document.getElementById('visual-shadow-blur-val').textContent = (vis.shadow_blur || 0) + 'px';
+        
+        document.getElementById('visual-letter-spacing-headings').value = vis.letter_spacing_headings || 0;
+        document.getElementById('visual-letter-spacing-headings-val').textContent = (vis.letter_spacing_headings || 0) + 'px';
+        
+        document.getElementById('visual-letter-spacing-body').value = vis.letter_spacing_body || 0;
+        document.getElementById('visual-letter-spacing-body-val').textContent = (vis.letter_spacing_body || 0) + 'px';
+        
+        document.getElementById('visual-line-height-body').value = vis.line_height_body || 1.5;
+        document.getElementById('visual-line-height-body-val').textContent = vis.line_height_body || 1.5;
+
+        document.getElementById('visual-names-line-height').value = vis.names_line_height !== undefined ? vis.names_line_height : 1.1;
+        document.getElementById('visual-names-line-height-val').textContent = vis.names_line_height !== undefined ? vis.names_line_height : 1.1;
+
+        document.getElementById('visual-names-stroke-width').value = vis.names_stroke_width !== undefined ? vis.names_stroke_width : 0;
+        document.getElementById('visual-names-stroke-width-val').textContent = (vis.names_stroke_width !== undefined ? vis.names_stroke_width : 0) + 'px';
+
+        document.getElementById('visual-names-stroke-color').value = vis.names_stroke_color || '#000000';
+        document.getElementById('visual-names-stroke-color-hex').value = vis.names_stroke_color || '#000000';
+
+        // Headings Stroke
+        document.getElementById('visual-headings-stroke-width').value = vis.headings_stroke_width !== undefined ? vis.headings_stroke_width : 0;
+        document.getElementById('visual-headings-stroke-width-val').textContent = (vis.headings_stroke_width !== undefined ? vis.headings_stroke_width : 0) + 'px';
+        document.getElementById('visual-headings-stroke-color').value = vis.headings_stroke_color || '#000000';
+        document.getElementById('visual-headings-stroke-color-hex').value = vis.headings_stroke_color || '#000000';
+
+        // Body Stroke
+        document.getElementById('visual-body-stroke-width').value = vis.body_stroke_width !== undefined ? vis.body_stroke_width : 0;
+        document.getElementById('visual-body-stroke-width-val').textContent = (vis.body_stroke_width !== undefined ? vis.body_stroke_width : 0) + 'px';
+        document.getElementById('visual-body-stroke-color').value = vis.body_stroke_color || '#000000';
+        document.getElementById('visual-body-stroke-color-hex').value = vis.body_stroke_color || '#000000';
+
+        // Cover Title Stroke
+        document.getElementById('visual-cover-title-stroke-width').value = vis.cover_title_stroke_width !== undefined ? vis.cover_title_stroke_width : 0;
+        document.getElementById('visual-cover-title-stroke-width-val').textContent = (vis.cover_title_stroke_width !== undefined ? vis.cover_title_stroke_width : 0) + 'px';
+        document.getElementById('visual-cover-title-stroke-color').value = vis.cover_title_stroke_color || '#000000';
+        document.getElementById('visual-cover-title-stroke-color-hex').value = vis.cover_title_stroke_color || '#000000';
+
+        // Hero Title Stroke
+        document.getElementById('visual-hero-title-stroke-width').value = vis.hero_title_stroke_width !== undefined ? vis.hero_title_stroke_width : 0;
+        document.getElementById('visual-hero-title-stroke-width-val').textContent = (vis.hero_title_stroke_width !== undefined ? vis.hero_title_stroke_width : 0) + 'px';
+        document.getElementById('visual-hero-title-stroke-color').value = vis.hero_title_stroke_color || '#000000';
+        document.getElementById('visual-hero-title-stroke-color-hex').value = vis.hero_title_stroke_color || '#000000';
+
+        // Closing Section bindings
+        if (vis.closing_section) {
+          const cs = vis.closing_section;
+          document.getElementById('closing-enabled').checked = cs.enabled;
+          document.getElementById('closing-width').value = cs.card_width;
+          document.getElementById('val-closing-width').textContent = cs.card_width + 'px';
+          document.getElementById('closing-padding').value = cs.card_padding;
+          document.getElementById('val-closing-padding').textContent = cs.card_padding + 'px';
+          document.getElementById('closing-radius').value = cs.border_radius;
+          document.getElementById('val-closing-radius').textContent = cs.border_radius + 'px';
+          document.getElementById('closing-opacity').value = cs.opacity;
+          document.getElementById('val-closing-opacity').textContent = cs.opacity + '%';
+          document.getElementById('closing-blur').value = cs.blur;
+          document.getElementById('val-closing-blur').textContent = cs.blur + 'px';
+          document.getElementById('closing-shadow').value = cs.shadow;
+          document.getElementById('val-closing-shadow').textContent = cs.shadow + '%';
+          document.getElementById('closing-mt').value = cs.margin_top;
+          document.getElementById('val-closing-mt').textContent = cs.margin_top + 'px';
+          document.getElementById('closing-mb').value = cs.margin_bottom;
+          document.getElementById('val-closing-mb').textContent = cs.margin_bottom + 'px';
+          document.getElementById('closing-safe').value = cs.safe_bottom;
+          document.getElementById('val-closing-safe').textContent = cs.safe_bottom + 'px';
+          document.getElementById('closing-align').value = cs.align;
+          document.getElementById('closing-text-align').value = cs.text_align;
+          // === COVER CONTENT INIT ===
+          const coverConf = configState.visual_configs.cover_content || {};
+          document.getElementById('cover-guest-placeholder').value = coverConf.guest_placeholder || "di Tempat";
+          document.getElementById('cover-btn-text').value = coverConf.btn_text || "Buka Undangan";
+          document.getElementById('cover-btn-icon').value = coverConf.btn_icon || "chevron_right";
+          document.getElementById('cover-btn-visible').checked = coverConf.btn_visible !== false;
+          
+          document.getElementById('cover-btn-color').value = coverConf.btn_color || "#C9A96E";
+          document.getElementById('cover-btn-color-hex').textContent = coverConf.btn_color || "#C9A96E";
+          
+          document.getElementById('cover-btn-text-color').value = coverConf.btn_text_color || "#FFFFFF";
+          document.getElementById('cover-btn-text-color-hex').textContent = coverConf.btn_text_color || "#FFFFFF";
+          
+          const cr = coverConf.btn_radius !== undefined ? coverConf.btn_radius : 9999;
+          document.getElementById('cover-btn-radius').value = cr >= 50 ? 50 : cr;
+          document.getElementById('val-cover-btn-radius').textContent = (cr >= 50 ? 9999 : cr) + "px";
+          
+          document.getElementById('cover-btn-width').value = coverConf.btn_width || 200;
+          document.getElementById('val-cover-btn-width').textContent = (coverConf.btn_width || 200) + "px";
+          
+          document.getElementById('cover-btn-height').value = coverConf.btn_height || 44;
+          document.getElementById('val-cover-btn-height').textContent = (coverConf.btn_height || 44) + "px";
+
+          // === COVER SPACING INIT ===
+          const coverSpace = configState.visual_configs.cover_spacing || {};
+          
+          const labelSize = configState.visual_configs.size_cover_title !== undefined ? configState.visual_configs.size_cover_title : 16;
+          document.getElementById('cover-label-size').value = labelSize;
+          document.getElementById('val-cover-label-size').textContent = labelSize + "px";
+          
+          const labelSpace = configState.visual_configs.letter_spacing_cover_title !== undefined ? configState.visual_configs.letter_spacing_cover_title : 0.18;
+          document.getElementById('cover-label-space').value = labelSpace;
+          document.getElementById('val-cover-label-space').textContent = labelSpace + "em";
+          
+          const labelToNames = coverSpace.label_to_names !== undefined ? coverSpace.label_to_names : 24;
+          document.getElementById('cover-space-label').value = labelToNames;
+          document.getElementById('val-cover-space-label').textContent = labelToNames + "px";
+          
+          const greetToGuest = coverSpace.greeting_to_guest !== undefined ? coverSpace.greeting_to_guest : 4;
+          document.getElementById('cover-space-greeting').value = greetToGuest;
+          document.getElementById('val-cover-space-greeting').textContent = greetToGuest + "px";
+          
+          const guestToBtn = coverSpace.guest_to_button !== undefined ? coverSpace.guest_to_button : 24;
+          document.getElementById('cover-space-guest').value = guestToBtn;
+          document.getElementById('val-cover-space-guest').textContent = guestToBtn + "px";
+
+          // === COUNTDOWN CONTENT INIT ===
+          const countConf = configState.visual_configs.countdown_content || {};
+          document.getElementById('count-show-title').checked = countConf.show_title !== false;
+          document.getElementById('count-show-subtitle').checked = countConf.show_subtitle !== false;
+          document.getElementById('count-show-timer').checked = countConf.show_countdown !== false;
+          
+          document.getElementById('count-card-color').value = countConf.card_color || "#C9A96E";
+          document.getElementById('count-number-color').value = countConf.number_color || "#FFFFFF";
+          document.getElementById('count-label-color').value = countConf.label_color || "#FFFFFF";
+          
+          document.getElementById('count-radius').value = countConf.card_radius !== undefined ? countConf.card_radius : 16;
+          document.getElementById('val-count-radius').textContent = (countConf.card_radius !== undefined ? countConf.card_radius : 16) + "px";
+          
+          document.getElementById('count-width').value = countConf.card_width || 384;
+          document.getElementById('val-count-width').textContent = (countConf.card_width || 384) + "px";
+          
+          updateCountAlignButtons(countConf.card_align || 'center');
+          // === ACARA CONTENT INIT ===
+          const acaraConf = configState.visual_configs.acara_content || {};
+          document.getElementById('acara-section-title').value = acaraConf.section_title !== undefined ? acaraConf.section_title : "Detail Acara";
+          document.getElementById('acara-section-subtitle').value = acaraConf.section_subtitle || "";
+          document.getElementById('acara-show-title').checked = acaraConf.show_section_title !== false;
+          document.getElementById('acara-show-subtitle').checked = acaraConf.show_section_subtitle === true;
+
+          document.getElementById('acara-akad-label').value = acaraConf.akad_label !== undefined ? acaraConf.akad_label : "Akad Nikah";
+          document.getElementById('acara-show-akad').checked = acaraConf.show_akad !== false;
+
+          document.getElementById('acara-resepsi-label').value = acaraConf.resepsi_label !== undefined ? acaraConf.resepsi_label : "Resepsi";
+          document.getElementById('acara-show-resepsi').checked = acaraConf.show_resepsi !== false;
+
+          document.getElementById('acara-maps-btn-text').value = acaraConf.maps_button_text !== undefined ? acaraConf.maps_button_text : "Lihat Lokasi";
+          document.getElementById('acara-show-maps-btn').checked = acaraConf.maps_button_visible !== false;
+
+          document.getElementById('acara-cal-btn-text').value = acaraConf.calendar_button_text !== undefined ? acaraConf.calendar_button_text : "Kalender";
+          document.getElementById('acara-show-cal-btn').checked = acaraConf.calendar_button_visible !== false;
+          checkAcaraWarning();
+          document.getElementById('closing-title').value = cs.title_size;
+          document.getElementById('val-closing-title').textContent = cs.title_size + 'px';
+          document.getElementById('closing-body').value = cs.body_size;
+          document.getElementById('val-closing-body').textContent = cs.body_size + 'px';
+          document.getElementById('closing-names').value = cs.names_size;
+          document.getElementById('val-closing-names').textContent = cs.names_size + 'px';
+          
+          if (cs.gap_title_body !== undefined) {
+            document.getElementById('closing-gap-title').value = cs.gap_title_body;
+            document.getElementById('val-closing-gap-title').textContent = cs.gap_title_body + 'px';
+          }
+          if (cs.gap_body_salam !== undefined) {
+            document.getElementById('closing-gap-body').value = cs.gap_body_salam;
+            document.getElementById('val-closing-gap-body').textContent = cs.gap_body_salam + 'px';
+          }
+          if (cs.gap_salam_names !== undefined) {
+            document.getElementById('closing-gap-salam').value = cs.gap_salam_names;
+            document.getElementById('val-closing-gap-salam').textContent = cs.gap_salam_names + 'px';
+          }
+          if (cs.names_layout !== undefined) {
+            document.getElementById('closing-names-layout').value = cs.names_layout;
+          }
+          if (cs.names_align !== undefined) {
+            document.getElementById('closing-names-align').value = cs.names_align;
+          }
+          if (cs.gap_names !== undefined) {
+            document.getElementById('closing-gap-names').value = cs.gap_names;
+            document.getElementById('val-closing-gap-names').textContent = cs.gap_names + 'px';
+          }
+        }
+      }
+
+      // Bind photos preview
+      if (configState.subject_identity.groom.photo_url) {
+        document.getElementById('groom-photo-preview-wrap').innerHTML = `<img src="${configState.subject_identity.groom.photo_url}" class="w-full h-full object-cover">`;
+      }
+      if (configState.subject_identity.bride.photo_url) {
+        document.getElementById('bride-photo-preview-wrap').innerHTML = `<img src="${configState.subject_identity.bride.photo_url}" class="w-full h-full object-cover">`;
+      }
+
+      // Bind Groom & Bride
+      document.getElementById('groom-nick').value = configState.subject_identity.groom.nickname;
+      document.getElementById('groom-full').value = configState.subject_identity.groom.full_name;
+      document.getElementById('groom-father').value = configState.subject_identity.groom.father_name;
+      document.getElementById('groom-mother').value = configState.subject_identity.groom.mother_name;
+      document.getElementById('groom-bio-input').value = configState.subject_identity.groom.bio;
+      
+      document.getElementById('bride-nick').value = configState.subject_identity.bride.nickname;
+      document.getElementById('bride-full').value = configState.subject_identity.bride.full_name;
+      document.getElementById('bride-father').value = configState.subject_identity.bride.father_name;
+      document.getElementById('bride-mother').value = configState.subject_identity.bride.mother_name;
+      document.getElementById('bride-bio-input').value = configState.subject_identity.bride.bio;
+      
+      // Bind Events
+      document.getElementById('akad-date').value = configState.event_details.akad.date;
+      document.getElementById('akad-start').value = configState.event_details.akad.time_start;
+      document.getElementById('akad-end').value = configState.event_details.akad.time_end;
+      document.getElementById('akad-venue-name').value = configState.event_details.akad.venue_name;
+      document.getElementById('akad-address-input').value = configState.event_details.akad.venue_address;
+      document.getElementById('akad-maps').value = configState.event_details.akad.maps_url;
+      
+      document.getElementById('resepsi-date').value = configState.event_details.resepsi.date;
+      document.getElementById('resepsi-start').value = configState.event_details.resepsi.time_start;
+      document.getElementById('resepsi-end').value = configState.event_details.resepsi.time_end;
+      document.getElementById('resepsi-venue-name').value = configState.event_details.resepsi.venue_name;
+      document.getElementById('resepsi-address-input').value = configState.event_details.resepsi.venue_address;
+      document.getElementById('resepsi-maps').value = configState.event_details.resepsi.maps_url;
+      
+      document.getElementById('countdown-target').value = configState.event_details.countdown_target;
+      
+      // Bind lists
+      renderLoveStoryEditor();
+      renderGiftEditor();
+      
+      // Bind Family textareas
+      document.getElementById('family-groom-textarea').value = (configState.turut_mengundang.groom_family || []).join('\n');
+      document.getElementById('family-bride-textarea').value = (configState.turut_mengundang.bride_family || []).join('\n');
+      
+      // Bind Background Music Settings
+      const audioConfig = configState.media_assets?.audio || { url: "", title: "" };
+      document.getElementById('audio-title').value = audioConfig.title || "";
+
+      const presetSelect = document.getElementById('audio-preset-select');
+      const customUrlInput = document.getElementById('audio-custom-url');
+      const customContainer = document.getElementById('custom-audio-url-container');
+
+      let matchedPreset = false;
+      if (presetSelect) {
+        for (let option of presetSelect.options) {
+          if (option.value === audioConfig.url) {
+            presetSelect.value = audioConfig.url;
+            matchedPreset = true;
+            break;
+          }
+        }
+
+        if (!matchedPreset && audioConfig.url) {
+          presetSelect.value = "custom";
+          if (customContainer) customContainer.classList.remove('hidden');
+          
+          const statusLabel = document.getElementById('audio-upload-status');
+          if (audioConfig.url.startsWith('data:audio')) {
+            if (customUrlInput) customUrlInput.value = "[File Audio Terunggah]";
+            if (statusLabel) statusLabel.textContent = "File terunggah aktif";
+          } else {
+            if (customUrlInput) customUrlInput.value = audioConfig.url;
+            if (statusLabel) statusLabel.textContent = "Menggunakan URL kustom";
+          }
+        } else {
+          if (customUrlInput) customUrlInput.value = "";
+          if (customContainer) customContainer.classList.add('hidden');
+        }
+      }
+
+      // Bind newly added premium features
+      if (configState.visual_configs) {
+        const vis = configState.visual_configs;
+        
+        // Theme
+        const themeSelect = document.getElementById('visual-theme-select');
+        if (themeSelect) themeSelect.value = vis.theme_id || 'watercolor_green';
+        
+        // Font selections
+        const fontHeadingSelect = document.getElementById('visual-font-heading');
+        if (fontHeadingSelect) fontHeadingSelect.value = vis.font_heading || 'Cormorant Garamond';
+        const fontBodySelect = document.getElementById('visual-font-body');
+        if (fontBodySelect) fontBodySelect.value = vis.font_body || 'DM Sans';
+        
+        // Custom color selections
+        const primaryColorPicker = document.getElementById('visual-primary-color');
+        if (primaryColorPicker) primaryColorPicker.value = vis.primary_color || '#C9A96E';
+        const primaryColorHex = document.getElementById('visual-primary-color-hex');
+        if (primaryColorHex) primaryColorHex.textContent = vis.primary_color || '#C9A96E';
+        
+        const secondaryColorPicker = document.getElementById('visual-secondary-color');
+        if (secondaryColorPicker) secondaryColorPicker.value = vis.secondary_color || '#FAF7F2';
+        const secondaryColorHex = document.getElementById('visual-secondary-color-hex');
+        if (secondaryColorHex) secondaryColorHex.textContent = vis.secondary_color || '#FAF7F2';
+        
+        // Background & Typography Animations
+        const animatedBgSelect = document.getElementById('visual-animated-bg');
+        if (animatedBgSelect) animatedBgSelect.value = (vis.animated_bg && vis.animated_bg.type) || 'falling_leaves';
+        
+        const marqueeToggle = document.getElementById('visual-marquee');
+        if (marqueeToggle) marqueeToggle.checked = !!vis.marquee_enabled;
+        const typewriterToggle = document.getElementById('visual-typewriter');
+        if (typewriterToggle) typewriterToggle.checked = !!vis.typewriter_enabled;
+        const letterStaggerToggle = document.getElementById('visual-letter-stagger');
+        if (letterStaggerToggle) letterStaggerToggle.checked = !!vis.letter_stagger_enabled;
+        
+        // Cover animation
+        const coverAnimSelect = document.getElementById('visual-cover-animation');
+        if (coverAnimSelect) coverAnimSelect.value = vis.cover_animation || 'curtain';
+        
+        // Ornaments
+        const cornerFlowersToggle = document.getElementById('visual-corner-flowers');
+        if (cornerFlowersToggle) cornerFlowersToggle.checked = vis.corner_flowers_enabled !== false;
+        const dividersToggle = document.getElementById('visual-dividers');
+        if (dividersToggle) dividersToggle.checked = vis.dividers_enabled !== false;
+      }
+      
+      // Guest greeting template
+      const greetingInput = document.getElementById('greeting-template');
+      if (greetingInput) greetingInput.value = configState.subject_identity?.guest_greeting_template || 'Kepada Yth. Bapak/Ibu/Sdr/i';
+      
+      // URL slug & Published toggle
+      const slugInput = document.getElementById('config-slug');
+      if (slugInput) slugInput.value = configState.slug || 'andy-dan-mawar';
+      const publishedToggle = document.getElementById('config-published');
+      if (publishedToggle) publishedToggle.checked = configState.is_published !== false;
+
+      // Initial preview render trigger
+      setTimeout(postStateToPreview, 1000);
+      generateShareLink();
+    });
+
+    // Save DB Info to localStorage
+    function saveDatabaseCredentials() {
+      localStorage.setItem('supabase_url', document.getElementById('db-url').value.trim());
+      localStorage.setItem('supabase_key', document.getElementById('db-key').value.trim());
+    }
+
+    // Helper to modify config path dynamically e.g. "subject_identity.groom.nickname"
+    function checkAcaraWarning() {
+      const akadOff = !document.getElementById('acara-show-akad').checked;
+      const resepsiOff = !document.getElementById('acara-show-resepsi').checked;
+      const warning = document.getElementById('acara-hidden-warning');
+      if (warning) {
+        warning.style.display = (akadOff && resepsiOff) ? 'flex' : 'none';
+      }
+    }
+
+    function updateConfig(path, value) {
+      const parts = path.split('.');
+      let current = configState;
+      for (let i = 0; i < parts.length - 1; i++) {
+        if (!current[parts[i]]) {
+          current[parts[i]] = {}; // Initialize safely if it doesn't exist
+        }
+        current = current[parts[i]];
+      }
+      current[parts[parts.length - 1]] = value;
+      
+      // Side effect for visual colors input sync
+      if (path === 'visual_configs.font_color_names') {
+        document.getElementById('visual-color-names-hex').value = value;
+      } else if (path === 'visual_configs.font_color_headings') {
+        document.getElementById('visual-color-headings-hex').value = value;
+      } else if (path === 'visual_configs.font_color_body') {
+        document.getElementById('visual-color-body-hex').value = value;
+      } else if (path === 'visual_configs.color_cover_title') {
+        document.getElementById('visual-color-cover-title-hex').value = value;
+      } else if (path === 'visual_configs.color_hero_title') {
+        document.getElementById('visual-color-hero-title-hex').value = value;
+      } else if (path === 'visual_configs.shadow_color') {
+        document.getElementById('visual-color-shadow-hex').value = value;
+      } else if (path === 'visual_configs.names_stroke_color') {
+        document.getElementById('visual-names-stroke-color-hex').value = value;
+      } else if (path === 'visual_configs.headings_stroke_color') {
+        document.getElementById('visual-headings-stroke-color-hex').value = value;
+      } else if (path === 'visual_configs.body_stroke_color') {
+        document.getElementById('visual-body-stroke-color-hex').value = value;
+      } else if (path === 'visual_configs.cover_title_stroke_color') {
+        document.getElementById('visual-cover-title-stroke-color-hex').value = value;
+      } else if (path === 'visual_configs.hero_title_stroke_color') {
+        document.getElementById('visual-hero-title-stroke-color-hex').value = value;
+      }
+      
+      // Persist locally
+      localStorage.setItem('wedding_config_state', JSON.stringify(configState));
+      
+      console.log("CMS CONFIG UPDATED", configState.visual_configs.closing_section);
+
+      // Post updates to preview
+      postStateToPreview();
+      generateShareLink();
+    }
+
+
+    // Background Music Preset & Custom updates
+    function selectMusicPreset(value) {
+      const customContainer = document.getElementById('custom-audio-url-container');
+      const customInput = document.getElementById('audio-custom-url');
+      const presetSelect = document.getElementById('audio-preset-select');
+      
+      if (value === 'custom') {
+        if (customContainer) customContainer.classList.remove('hidden');
+        const customUrl = customInput ? customInput.value.trim() : '';
+        updateConfig('media_assets.audio.url', customUrl);
+      } else {
+        if (customContainer) customContainer.classList.add('hidden');
+        updateConfig('media_assets.audio.url', value);
+        
+        // Update title automatically based on the selected option text
+        if (presetSelect) {
+          const selectedOption = presetSelect.options[presetSelect.selectedIndex];
+          const cleanTitle = selectedOption.text.replace(/\s*\(Preset\s*\d+\)/i, '');
+          const audioTitleEl = document.getElementById('audio-title');
+          if (audioTitleEl) audioTitleEl.value = cleanTitle;
+          updateConfig('media_assets.audio.title', cleanTitle);
+        }
+      }
+    }
+
+    function updateCustomMusic() {
+      const customInput = document.getElementById('audio-custom-url');
+      if (customInput) {
+        updateConfig('media_assets.audio.url', customInput.value.trim());
+      }
+    }
+
+    function updateMusicTitle(value) {
+      updateConfig('media_assets.audio.title', value.trim());
+    }
+
+    // Process and read audio file as base64 data URL
+    window.uploadAudioFile = function(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        
+        // 4MB limit
+        const maxSize = 4 * 1024 * 1024;
+        if (file.size > maxSize) {
+          alert("Ukuran file lagu terlalu besar! Maksimal adalah 4MB agar dapat disimpan dengan lancar di browser.");
+          input.value = '';
+          return;
+        }
+
+        const statusLabel = document.getElementById('audio-upload-status');
+        if (statusLabel) statusLabel.textContent = "Mengunggah...";
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const base64Audio = e.target.result;
+          
+          if (statusLabel) statusLabel.textContent = "Terunggah: " + file.name;
+          
+          // Update configuration audio URL
+          updateConfig('media_assets.audio.url', base64Audio);
+          
+          // Prefill url input
+          const customUrlInput = document.getElementById('audio-custom-url');
+          if (customUrlInput) customUrlInput.value = "[File Audio Terunggah]";
+          
+          // Set music title to filename without extension
+          const cleanTitle = file.name.replace(/\.[^/.]+$/, "");
+          const audioTitleEl = document.getElementById('audio-title');
+          if (audioTitleEl) audioTitleEl.value = cleanTitle;
+          updateConfig('media_assets.audio.title', cleanTitle);
+        };
+        
+        reader.onerror = function() {
+          alert("Gagal membaca file audio!");
+          if (statusLabel) statusLabel.textContent = "Gagal mengunggah";
+        };
+        
+        reader.readAsDataURL(file);
+      }
+    };
+
+    // Post to Iframe Preview
+    function postStateToPreview() {
+      console.log("MESSAGE SENT TO PREVIEW");
+      const iframe = document.getElementById('preview-frame');
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage({
+          type: 'wedding-config-update',
+          config: configState
+        }, '*');
+      }
+    }
+
+    // Render / Manage Love Story Milestones
+    function renderLoveStoryEditor() {
+      const container = document.getElementById('love-story-editor-list');
+      if (!container) return;
+      
+      const stories = configState.love_story || [];
+      container.innerHTML = stories.map((story, idx) => `
+        <div class="bg-black/30 border border-stone-850 p-4 rounded-xl space-y-3 relative">
+          <button onclick="removeLoveStoryItem(${idx})" class="absolute top-3 right-3 text-red-500 hover:text-red-600 font-bold text-xs">Hapus</button>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[10px] text-stone-400 font-semibold mb-1">Judul Momen</label>
+              <input type="text" value="${story.title}" oninput="updateStory(${idx}, 'title', this.value)" class="w-full bg-[#141716] border border-stone-800 rounded-lg px-3 py-1.5 text-xs text-stone-200 focus:outline-none focus:border-amber-500">
+            </div>
+            <div>
+              <label class="block text-[10px] text-stone-400 font-semibold mb-1">Waktu / Tanggal</label>
+              <input type="text" value="${story.date}" oninput="updateStory(${idx}, 'date', this.value)" class="w-full bg-[#141716] border border-stone-800 rounded-lg px-3 py-1.5 text-xs text-stone-200 focus:outline-none focus:border-amber-500" placeholder="Contoh: Januari, 2025">
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] text-stone-400 font-semibold mb-1">Penjelasan Detail</label>
+            <textarea rows="2" oninput="updateStory(${idx}, 'description', this.value)" class="w-full bg-[#141716] border border-stone-800 rounded-lg px-3 py-1.5 text-xs text-stone-200 focus:outline-none focus:border-amber-500">${story.description}</textarea>
+          </div>
+          <div class="space-y-2 mt-2 pt-1 border-t border-stone-850/55">
+            <label class="block text-[10px] text-stone-400 font-semibold mb-1">Foto Momen (Opsional)</label>
+            <div class="flex items-center gap-3">
+              <input type="file" accept="image/*" onchange="uploadStoryPhoto(${idx}, this)" class="hidden" id="story-photo-upload-${idx}">
+              <button type="button" onclick="document.getElementById('story-photo-upload-${idx}').click()" class="bg-stone-800 hover:bg-stone-700 text-stone-200 text-[10px] font-semibold py-1.5 px-3 rounded-lg transition-all">Pilih Foto</button>
+              <div id="story-photo-preview-${idx}" class="w-12 h-9 rounded bg-[#141716] border border-stone-850 overflow-hidden flex items-center justify-center">
+                ${story.photo_url ? `<img src="${story.photo_url}" class="w-full h-full object-cover">` : `<span class="text-stone-600 text-[9px]">Kosong</span>`}
+              </div>
+              ${story.photo_url ? `<button type="button" onclick="clearStoryPhoto(${idx})" class="text-red-500 hover:text-red-650 text-[10px] font-semibold">Hapus</button>` : ''}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.addLoveStoryItem = function() {
+      configState.love_story.push({
+        title: "Kisah Baru",
+        date: "Tanggal Baru",
+        description: "Tuliskan detail cerita di sini...",
+        photo_url: ""
+      });
+      localStorage.setItem('wedding_config_state', JSON.stringify(configState));
+      renderLoveStoryEditor();
+      postStateToPreview();
+    };
+
+    window.removeLoveStoryItem = function(idx) {
+      configState.love_story.splice(idx, 1);
+      localStorage.setItem('wedding_config_state', JSON.stringify(configState));
+      renderLoveStoryEditor();
+      postStateToPreview();
+    };
+
+    window.updateStory = function(idx, key, val) {
+      configState.love_story[idx][key] = val;
+      localStorage.setItem('wedding_config_state', JSON.stringify(configState));
+      postStateToPreview();
+    };
+
+    window.uploadStoryPhoto = function(idx, input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const max_size = 400;
+            let width = img.width;
+            let height = img.height;
+            
+            if (width > height) {
+              if (width > max_size) {
+                height *= max_size / width;
+                width = max_size;
+              }
+            } else {
+              if (height > max_size) {
+                width *= max_size / height;
+                height = max_size;
+              }
+            }
+            
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.80);
+            updateStory(idx, 'photo_url', compressedBase64);
+            renderLoveStoryEditor();
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    window.clearStoryPhoto = function(idx) {
+      updateStory(idx, 'photo_url', '');
+      renderLoveStoryEditor();
+    };
+
+    // Render / Manage Gifts Accounts
+    function renderGiftEditor() {
+      const container = document.getElementById('gift-editor-list');
+      if (!container) return;
+      
+      const banks = configState.gifts.bank_accounts || [];
+      const wallets = configState.gifts.ewallets || [];
+      
+      let html = '';
+      
+      // Render Banks
+      banks.forEach((bank, idx) => {
+        html += `
+          <div class="bg-black/30 border border-stone-850 p-4 rounded-xl space-y-3 relative">
+            <button onclick="removeGiftItem('bank', ${idx})" class="absolute top-3 right-3 text-red-500 hover:text-red-600 font-bold text-xs">Hapus</button>
+            <div class="font-cinzel text-xs font-bold text-amber-500">Bank Transfer</div>
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <label class="block text-[10px] text-stone-400 font-semibold mb-1">Nama Bank</label>
+                <input type="text" value="${bank.bank}" oninput="updateGift('bank', ${idx}, 'bank', this.value)" class="w-full bg-[#141716] border border-stone-800 rounded-lg px-2.5 py-1.5 text-xs text-stone-200 focus:outline-none focus:border-amber-500" placeholder="BCA/Mandiri">
+              </div>
+              <div>
+                <label class="block text-[10px] text-stone-400 font-semibold mb-1">Nomor Rekening</label>
+                <input type="text" value="${bank.number}" oninput="updateGift('bank', ${idx}, 'number', this.value)" class="w-full bg-[#141716] border border-stone-800 rounded-lg px-2.5 py-1.5 text-xs text-stone-200 focus:outline-none focus:border-amber-500">
+              </div>
+              <div>
+                <label class="block text-[10px] text-stone-400 font-semibold mb-1">Atas Nama</label>
+                <input type="text" value="${bank.name}" oninput="updateGift('bank', ${idx}, 'name', this.value)" class="w-full bg-[#141716] border border-stone-800 rounded-lg px-2.5 py-1.5 text-xs text-stone-200 focus:outline-none focus:border-amber-500">
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      
+      // Render Wallets
+      wallets.forEach((wallet, idx) => {
+        html += `
+          <div class="bg-black/30 border border-stone-850 p-4 rounded-xl space-y-3 relative">
+            <button onclick="removeGiftItem('wallet', ${idx})" class="absolute top-3 right-3 text-red-500 hover:text-red-600 font-bold text-xs">Hapus</button>
+            <div class="font-cinzel text-xs font-bold text-amber-500">E-Wallet</div>
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <label class="block text-[10px] text-stone-400 font-semibold mb-1">Penyedia</label>
+                <input type="text" value="${wallet.provider}" oninput="updateGift('wallet', ${idx}, 'provider', this.value)" class="w-full bg-[#141716] border border-stone-800 rounded-lg px-2.5 py-1.5 text-xs text-stone-200 focus:outline-none focus:border-amber-500" placeholder="GoPay/OVO/Dana">
+              </div>
+              <div>
+                <label class="block text-[10px] text-stone-400 font-semibold mb-1">Nomor HP</label>
+                <input type="text" value="${wallet.number}" oninput="updateGift('wallet', ${idx}, 'number', this.value)" class="w-full bg-[#141716] border border-stone-800 rounded-lg px-2.5 py-1.5 text-xs text-stone-200 focus:outline-none focus:border-amber-500">
+              </div>
+              <div>
+                <label class="block text-[10px] text-stone-400 font-semibold mb-1">Atas Nama</label>
+                <input type="text" value="${wallet.name}" oninput="updateGift('wallet', ${idx}, 'name', this.value)" class="w-full bg-[#141716] border border-stone-800 rounded-lg px-2.5 py-1.5 text-xs text-stone-200 focus:outline-none focus:border-amber-500">
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html;
+      renderWishlistEditor();
+    }
+
+    function renderWishlistEditor() {
+      const container = document.getElementById('wishlist-editor-list');
+      if (!container) return;
+      
+      if (!configState.gifts.wishlist) {
+        configState.gifts.wishlist = [];
+      }
+      const wishlist = configState.gifts.wishlist;
+      let html = '';
+      
+      wishlist.forEach((item, idx) => {
+        html += `
+          <div class="bg-black/30 border border-stone-850 p-4 rounded-xl space-y-3 relative">
+            <button onclick="removeWishlistItem(${idx})" class="absolute top-3 right-3 text-red-500 hover:text-red-600 font-bold text-xs">Hapus</button>
+            <div class="font-cinzel text-xs font-bold text-amber-500">Kado Barang / Wishlist</div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[10px] text-stone-400 font-semibold mb-1">Nama Barang</label>
+                <input type="text" value="${item.item_name}" oninput="updateWishlist(${idx}, 'item_name', this.value)" class="w-full bg-[#141716] border border-stone-800 rounded-lg px-3 py-1.5 text-xs text-stone-200 focus:outline-none focus:border-amber-500" placeholder="Contoh: Rice Cooker">
+              </div>
+              <div>
+                <label class="block text-[10px] text-stone-400 font-semibold mb-1">Catatan / Merk / Link</label>
+                <input type="text" value="${item.notes || ''}" oninput="updateWishlist(${idx}, 'notes', this.value)" class="w-full bg-[#141716] border border-stone-800 rounded-lg px-3 py-1.5 text-xs text-stone-200 focus:outline-none focus:border-amber-500" placeholder="Contoh: Cosmos Warna Putih">
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html || "<p class='italic opacity-60 text-center text-xs text-stone-500 py-2'>Belum ada item wishlist.</p>";
+    }
+
+    window.addGiftItem = function() {
+      if (configState.gifts.bank_accounts.length <= configState.gifts.ewallets.length) {
+        configState.gifts.bank_accounts.push({ bank: "BCA", number: "1234567890", name: "Nama Rekening" });
+      } else {
+        configState.gifts.ewallets.push({ provider: "GoPay", number: "08123456789", name: "Nama E-Wallet" });
+      }
+      localStorage.setItem('wedding_config_state', JSON.stringify(configState));
+      renderGiftEditor();
+      postStateToPreview();
+    };
+
+    window.removeGiftItem = function(type, idx) {
+      if (type === 'bank') {
+        configState.gifts.bank_accounts.splice(idx, 1);
+      } else {
+        configState.gifts.ewallets.splice(idx, 1);
+      }
+      localStorage.setItem('wedding_config_state', JSON.stringify(configState));
+      renderGiftEditor();
+      postStateToPreview();
+    };
+
+    window.updateGift = function(type, idx, key, val) {
+      if (type === 'bank') {
+        configState.gifts.bank_accounts[idx][key] = val;
+      } else {
+        configState.gifts.ewallets[idx][key] = val;
+      }
+      localStorage.setItem('wedding_config_state', JSON.stringify(configState));
+      postStateToPreview();
+    };
+
+    window.addWishlistItem = function() {
+      if (!configState.gifts.wishlist) configState.gifts.wishlist = [];
+      configState.gifts.wishlist.push({ item_name: "Item Kado Baru", notes: "Catatan item baru" });
+      localStorage.setItem('wedding_config_state', JSON.stringify(configState));
+      renderWishlistEditor();
+      postStateToPreview();
+    };
+
+    window.removeWishlistItem = function(idx) {
+      if (!configState.gifts.wishlist) return;
+      configState.gifts.wishlist.splice(idx, 1);
+      localStorage.setItem('wedding_config_state', JSON.stringify(configState));
+      renderWishlistEditor();
+      postStateToPreview();
+    };
+
+    window.updateWishlist = function(idx, key, val) {
+      if (!configState.gifts.wishlist) return;
+      configState.gifts.wishlist[idx][key] = val;
+      localStorage.setItem('wedding_config_state', JSON.stringify(configState));
+      postStateToPreview();
+    };
+
+    // Update Family List Textarea on input
+    function updateFamilyList(side) {
+      const val = document.getElementById('family-' + side + '-textarea').value;
+      const arr = val.split('\n').map(item => item.trim()).filter(item => item.length > 0);
+      
+      if (side === 'groom') {
+        configState.turut_mengundang.groom_family = arr;
+      } else {
+        configState.turut_mengundang.bride_family = arr;
+      }
+      
+      localStorage.setItem('wedding_config_state', JSON.stringify(configState));
+      postStateToPreview();
+    }
+
+    // Generate Share Guest Link
+    function generateShareLink() {
+      const name = document.getElementById('share-guest-name').value.trim();
+      
+      let base = '';
+      if (window.location.protocol === 'file:' || !window.location.hostname) {
+        base = 'http://localhost:8080/index.html';
+      } else {
+        base = window.location.origin + window.location.pathname.replace(/cms\.html/i, 'index.html');
+      }
+      
+      if (!name) {
+        document.getElementById('share-generated-url').value = base;
+      } else {
+        document.getElementById('share-generated-url').value = `${base}?to=${encodeURIComponent(name)}`;
+      }
+    }
+
+    function copyGeneratedShareLink(btn) {
+      const urlInput = document.getElementById('share-generated-url');
+      urlInput.select();
+      navigator.clipboard.writeText(urlInput.value).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = "Tersalin!";
+        btn.classList.replace('bg-amber-500', 'bg-emerald-500');
+        setTimeout(() => {
+          btn.textContent = orig;
+          btn.classList.replace('bg-emerald-500', 'bg-amber-500');
+        }, 1500);
+      });
+    }
+
+    // RSVP & Messages data retrieval
+    async function loadRSVPAndMessagesData() {
+      const rsvpBody = document.getElementById('cms-rsvp-table-body');
+      const messagesModeration = document.getElementById('cms-messages-moderation-list');
+      
+      rsvpBody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-stone-500 italic">Memuat data RSVP...</td></tr>`;
+      messagesModeration.innerHTML = `<p class="text-center py-4 text-stone-500 italic">Memuat data ucapan...</p>`;
+      
+      // Load RSVP Responses
+      let rsvps = [];
+      const supabaseUrl = localStorage.getItem('supabase_url');
+      const supabaseKey = localStorage.getItem('supabase_key');
+      
+      if (supabaseUrl && supabaseKey && typeof supabase !== 'undefined') {
+        try {
+          const client = supabase.createClient(supabaseUrl, supabaseKey);
+          const { data } = await client.from('rsvp_responses').select('*').order('created_at', { ascending: false });
+          if (data) rsvps = data;
+        } catch (e) {
+          console.error("Failed to read RSVPs from Supabase:", e);
+        }
+      }
+      
+      if (rsvps.length === 0) {
+        let localRsvps = localStorage.getItem('wedding_rsvps');
+        rsvps = localRsvps ? JSON.parse(localRsvps) : [
+          { guest_name: "Budi & Istri", attendance: "hadir", guest_count: 2, message: "Selamat menempuh hidup baru!", created_at: new Date().toISOString() }
+        ];
+      }
+      
+      rsvpBody.innerHTML = rsvps.map(rsvp => `
+        <tr class="hover:bg-stone-900/20">
+          <td class="py-2.5 px-3 font-semibold text-stone-200">${rsvp.guest_name}</td>
+          <td class="py-2.5 px-3 uppercase tracking-wider font-bold ${rsvp.attendance === 'hadir' ? 'text-emerald-500' : 'text-red-500'}">${rsvp.attendance}</td>
+          <td class="py-2.5 px-3 font-semibold text-stone-400">${rsvp.guest_count}</td>
+          <td class="py-2.5 px-3 text-stone-400 max-w-xs truncate" title="${rsvp.message || '-'}">${rsvp.message || '-'}</td>
+        </tr>
+      `).join('');
+
+      // Load Messages
+      let messages = [];
+      if (supabaseUrl && supabaseKey && typeof supabase !== 'undefined') {
+        try {
+          const client = supabase.createClient(supabaseUrl, supabaseKey);
+          const { data } = await client.from('guest_messages').select('*').order('created_at', { ascending: false });
+          if (data) messages = data;
+        } catch (e) {
+          console.error("Failed to read messages from Supabase:", e);
+        }
+      }
+      
+      if (messages.length === 0) {
+        let localMsgs = localStorage.getItem('wedding_messages');
+        messages = localMsgs ? JSON.parse(localMsgs) : [
+          { id: "1", name: "Elizabeth Bennet dan Darcy", message: "Sejatinya pernikahan adalah lembaran baru kehidupan, kebahagiaan, kebersamaan, dan hal-hal baik lainnya yang menyertai." }
+        ];
+      }
+      
+      messagesModeration.innerHTML = messages.map(msg => `
+        <div class="bg-black/25 border border-stone-850 p-4 rounded-xl flex items-start justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <h5 class="text-xs font-bold text-amber-500">${msg.name}</h5>
+              <span class="px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider ${msg.status === 'hidden' ? 'bg-red-500/10 text-red-500 border border-red-500/20' : 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'}">
+                ${msg.status === 'hidden' ? 'Sembunyi' : 'Aktif'}
+              </span>
+            </div>
+            <p class="text-stone-300 text-xs font-body leading-relaxed">${msg.message}</p>
+          </div>
+          <div class="flex gap-2 items-center shrink-0">
+            <button onclick="toggleMessageStatus('${msg.id}', '${msg.status === 'hidden' ? 'approved' : 'hidden'}')" class="text-[10px] uppercase font-bold ${msg.status === 'hidden' ? 'text-emerald-500 hover:text-emerald-650' : 'text-stone-400 hover:text-stone-300'}">
+              ${msg.status === 'hidden' ? 'Aktifkan' : 'Sembunyikan'}
+            </button>
+            <button onclick="deleteGuestMessage('${msg.id}')" class="text-[10px] uppercase font-bold text-red-500 hover:text-red-650">Hapus</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Toggle message active/hidden status handler
+    window.toggleMessageStatus = async function(id, newStatus) {
+      const supabaseUrl = localStorage.getItem('supabase_url');
+      const supabaseKey = localStorage.getItem('supabase_key');
+      let success = false;
+      
+      if (supabaseUrl && supabaseKey && typeof supabase !== 'undefined') {
+        try {
+          const client = supabase.createClient(supabaseUrl, supabaseKey);
+          const { error } = await client.from('guest_messages').update({ status: newStatus }).eq('id', id);
+          if (!error) success = true;
+        } catch (e) {
+          console.error("Failed to update message status on Supabase:", e);
+        }
+      }
+      
+      // LocalStorage fallback update
+      let localMsgs = localStorage.getItem('wedding_messages');
+      if (localMsgs) {
+        let messages = JSON.parse(localMsgs);
+        messages = messages.map(m => {
+          if (m.id === id) {
+            return { ...m, status: newStatus };
+          }
+          return m;
+        });
+        localStorage.setItem('wedding_messages', JSON.stringify(messages));
+      }
+      
+      loadRSVPAndMessagesData();
+      postStateToPreview();
+      
+      // Reload preview iframe completely to sync state
+      const iframe = document.getElementById('preview-frame');
+      if (iframe) iframe.src = iframe.src;
+    };
+
+    // Delete message handler
+    window.deleteGuestMessage = async function(id) {
+      if (!confirm("Apakah Anda yakin ingin menghapus ucapan ini?")) return;
+      
+      const supabaseUrl = localStorage.getItem('supabase_url');
+      const supabaseKey = localStorage.getItem('supabase_key');
+      let success = false;
+      
+      if (supabaseUrl && supabaseKey && typeof supabase !== 'undefined') {
+        try {
+          const client = supabase.createClient(supabaseUrl, supabaseKey);
+          const { error } = await client.from('guest_messages').delete().eq('id', id);
+          if (!error) success = true;
+        } catch (e) {
+          console.error("Failed to delete from Supabase:", e);
+        }
+      }
+      
+      if (!success) {
+        let localMsgs = localStorage.getItem('wedding_messages');
+        if (localMsgs) {
+          let messages = JSON.parse(localMsgs);
+          messages = messages.filter(m => m.id !== id);
+          localStorage.setItem('wedding_messages', JSON.stringify(messages));
+        }
+      }
+      
+      loadRSVPAndMessagesData();
+      postStateToPreview();
+      
+      // Reload preview iframe completely to sync state
+      const iframe = document.getElementById('preview-frame');
+      if (iframe) iframe.src = iframe.src;
+    };
+
+    // Helper to upload profile photo, compress it with canvas and save as base64
+    window.uploadProfilePhoto = function(side, input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const max_size = 300;
+            let width = img.width;
+            let height = img.height;
+            
+            if (width > height) {
+              if (width > max_size) {
+                height *= max_size / width;
+                width = max_size;
+              }
+            } else {
+              if (height > max_size) {
+                width *= max_size / height;
+                height = max_size;
+              }
+            }
+            
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
+            
+            // Update visual preview in dashboard
+            const previewWrap = document.getElementById(side + '-photo-preview-wrap');
+            previewWrap.innerHTML = `<img src="${compressedBase64}" class="w-full h-full object-cover">`;
+            
+            // Update configuration state
+            updateConfig(`subject_identity.${side}.photo_url`, compressedBase64);
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    
+    window.clearProfilePhoto = function(side) {
+      const fileInput = document.getElementById(side + '-photo-upload');
+      if (fileInput) fileInput.value = '';
+      const previewWrap = document.getElementById(side + '-photo-preview-wrap');
+      if (previewWrap) previewWrap.innerHTML = `<span class="text-stone-500 text-[10px]">Kosong</span>`;
+      updateConfig(`subject_identity.${side}.photo_url`, '');
+    };
+
+    // Theme Selector Handler
+    window.selectTheme = function(themeId) {
+      updateConfig('visual_configs.theme_id', themeId);
+      
+      // Load standard defaults from default themes.js if available inside preview-frame
+      const iframe = document.getElementById('preview-frame');
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage({ type: 'apply-theme', themeId: themeId }, '*');
+      }
+    };
+
+    // CSV Export for RSVP Responses
+    window.exportRSVPtoCSV = function() {
+      let csvContent = 'Nama Tamu,Status Kehadiran,Jumlah Tamu,Pesan\\n';
+      const rows = document.querySelectorAll('#cms-rsvp-table-body tr');
+      if (rows.length === 0) {
+        alert('Tidak ada data RSVP untuk di-export.');
+        return;
+      }
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length >= 4) {
+          const values = Array.from(cells).map(cell => {
+            let text = cell.textContent.trim().replace(/"/g, '""');
+            return `"${text}"`;
+          });
+          csvContent += values.join(',') + '\\n';
+        }
+      });
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `rsvp-${configState.slug || 'undangan'}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+    };
+
+    // Download compiled index.html with embedded configuration
+    async function downloadStandaloneInvitation() {
+      try {
+        // Fetch raw index.html content
+        const response = await fetch('index.html');
+        if (!response.ok) throw new Error("Gagal mengambil file index.html");
+        let htmlContent = await response.text();
+        
+        // Prepare replacement for config script
+        const targetString = '<script id="wedding-embedded-config" type="application/json">{}<' + '/script>';
+        const embeddedConfigString = `<script id="wedding-embedded-config" type="application/json">${JSON.stringify(configState)}<\/script>`;
+        
+        if (htmlContent.includes(targetString)) {
+          htmlContent = htmlContent.replace(targetString, embeddedConfigString);
+        } else {
+          // If already modified, let's append it properly before body ends
+          htmlContent = htmlContent.replace('</body>', `${embeddedConfigString}\n</body>`);
+        }
+        
+        // Trigger browser save file dialog
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `undangan-${configState.slug}.html`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        alert("Gagal mengekspor undangan: " + err.message);
+      }
+    }
+
+  </script>
+</body>
+</html>
+
+
+
+
+
+

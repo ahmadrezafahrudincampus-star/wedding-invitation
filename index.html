@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Undangan Pernikahan</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Undangan Pernikahan">
+  <meta property="og:description" content="Anda diundang untuk merayakan hari bahagia kami">
+  <meta property="og:image" content="assets/watercolor_bg.png">
+  <meta name="description" content="Undangan Pernikahan Digital Premium">
+  <!-- Tailwind CSS CDN -->
+  <script src="assets/tailwind.js"></script>
+  <!-- Tailwind custom configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#C9A96E',
+              hover: '#B5955C'
+            },
+            sage: {
+              light: '#E2E8E2',
+              dark: '#2C3E2B',
+              muted: '#5A6E59'
+            }
+          },
+          fontFamily: {
+            heading: ['Cormorant Garamond', 'serif'],
+            body: ['DM Sans', 'sans-serif'],
+            script: ['Great Vibes', 'cursive'],
+            cinzel: ['Cinzel', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Supabase CDN Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    /* FOUC Prevention */
+    body {
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    body.loaded {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="relative">
+
+  <!-- ================= COVERS / CURTAIN ================= -->
+  <div id="cover-curtain" class="curtain-cover wedding-bg">
+    <!-- Corner Flowers decoration -->
+    <div class="floral-corner floral-top-right"></div>
+    <div class="floral-corner floral-bottom-left"></div>
+    
+    <div class="cover-content z-20 text-center px-6 max-w-lg flex flex-col justify-center min-h-[85vh] py-12 lg:gap-8">
+      <div class="pt-6 lg:hidden">
+        <h4 id="cover-title-label" class="font-cinzel text-stone-500 text-xs tracking-[0.35em] uppercase mb-4"></h4>
+        <h1 class="font-script text-primary text-7xl md:text-8xl mt-2 mb-4 names-heading"><span class="groom-nickname"></span><br><span class="text-3xl font-heading font-light block my-2">&</span><span class="bride-nickname"></span></h1>
+      </div>
+      
+      <div class="flex flex-col items-center">
+        <!-- Guest Greeting Card -->
+        <div class="bg-white/80 border border-primary/20 backdrop-blur-md rounded-2xl p-6 w-full max-w-sm mb-6 shadow-sm">
+          <p class="text-xs tracking-wider text-sage-muted font-body mb-2"></p>
+          <h3 id="opening-guest-name" class="font-heading text-2xl font-bold text-sage-dark mb-1"></h3>
+          <p id="cover-guest-placeholder" class="text-[11px] text-stone-400 font-body">di Tempat</p>
+        </div>
+        
+        <!-- Button Buka Undangan -->
+        <button id="btn-buka-undangan" class="btn-primary btn-pill uppercase text-xs tracking-widest font-bold">
+          <svg id="btn-buka-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+          </svg>
+          <span id="btn-buka-text">Buka Undangan</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MAIN BODY CONTENT ================= -->
+  <main class="main-invitation-container wedding-bg min-h-screen relative pb-32">
+    <!-- Particle Canvas for Falling Leaves -->
+    <canvas id="particles-canvas"></canvas>
+    
+    <!-- Content wrapper -->
+    <div class="right-content-wrapper relative z-10">
+      <!-- Corner Flowers decoration -->
+      <div class="floral-corner floral-top-right"></div>
+      
+      <!-- SECTION 1: HERO DISPLAY (Save the Date) -->
+      <section id="hero" class="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20 pb-10">
+      <div class="reveal-on-scroll relative z-10">
+        <h1 class="font-script text-primary text-8xl mb-2 names-heading"><span class="groom-nickname"></span><br><span class="text-4xl font-heading font-light block my-1">&</span><span class="bride-nickname"></span></h1>
+        <h4 id="hero-title-label" class="font-heading text-2xl text-emerald-800 tracking-[0.2em] capitalize mt-6 mb-4 drop-shadow-[0_1px_1px_rgba(255,255,255,0.7)]"></h4>
+        
+        <p id="hero-subtitle" class="font-heading text-2xl text-sage-dark italic mb-8 mt-4"><span class="wedding-date-str"></span></p>
+        
+        <!-- Countdown Container Box -->
+        <div id="countdown-card" class="countdown-container flex items-center gap-4 bg-primary text-white rounded-2xl py-4 px-6 md:px-8 shadow-lg max-w-sm mx-auto justify-center font-heading">
+          <div class="countdown-item text-center w-14">
+            <span id="timer-days" class="text-3xl font-bold block leading-none">00</span>
+            <span class="text-[10px] uppercase tracking-wider font-body opacity-80 mt-1 block">Hari</span>
+          </div>
+          <div class="text-2xl opacity-60 font-body mb-4">:</div>
+          <div class="countdown-item text-center w-14">
+            <span id="timer-hours" class="text-3xl font-bold block leading-none">00</span>
+            <span class="text-[10px] uppercase tracking-wider font-body opacity-80 mt-1 block">Jam</span>
+          </div>
+          <div class="text-2xl opacity-60 font-body mb-4">:</div>
+          <div class="countdown-item text-center w-14">
+            <span id="timer-minutes" class="text-3xl font-bold block leading-none">00</span>
+            <span class="text-[10px] uppercase tracking-wider font-body opacity-80 mt-1 block">Menit</span>
+          </div>
+          <div class="text-2xl opacity-60 font-body mb-4">:</div>
+          <div class="countdown-item text-center w-14">
+            <span id="timer-seconds" class="text-3xl font-bold block leading-none">00</span>
+            <span class="text-[10px] uppercase tracking-wider font-body opacity-80 mt-1 block">Detik</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Flower Divider decoration -->
+      <div class="mt-8 mb-8 w-full reveal-on-scroll floral-divider-wrap">
+        <img src="assets/floral_bouquet.png" alt="Divider" class="w-full h-auto floral-divider floral-divider">
+      </div>
+    </section>
+
+    <!-- SECTION 2: MEMPELAI -->
+    <section id="mempelai" class="relative z-10 px-6 pt-10 pb-10 max-w-2xl mx-auto text-center">
+      <div class="reveal-on-scroll mb-12">
+        <p class="font-heading text-stone-600 leading-relaxed text-sm italic mb-4">Dengan mengucapkan syukur, kami mengundang Anda untuk menghadiri acara pernikahan kami.</p>
+        <h2 class="font-script text-primary text-5xl mb-4 wedding-section-title">Mempelai</h2>
+      </div>
+
+      <!-- Groom Box Card -->
+      <div class="reveal-on-scroll mb-8">
+        <!-- Squircle Groom Avatar -->
+        <div id="groom-avatar-squircle" class="squircle-avatar"></div>
+        <h3 class="font-script text-emerald-800 text-4xl mb-1 groom-nickname"></h3>
+        <h4 class="font-heading text-xl font-bold text-sage-dark mb-2 groom-fullname"></h4>
+        <p class="text-stone-500 text-xs groom-parents mb-2"></p>
+        <p class="text-amber-700 font-cinzel text-[10px] tracking-widest groom-bio"></p>
+      </div>
+
+      <!-- Bride Box Card -->
+      <div class="reveal-on-scroll mb-8">
+        <!-- Squircle Bride Avatar -->
+        <div id="bride-avatar-squircle" class="squircle-avatar"></div>
+        <h3 class="font-script text-emerald-800 text-4xl mb-1 bride-nickname"></h3>
+        <h4 class="font-heading text-xl font-bold text-sage-dark mb-2 bride-fullname"></h4>
+        <p class="text-stone-500 text-xs bride-parents mb-2"></p>
+        <p class="text-amber-700 font-cinzel text-[10px] tracking-widest bride-bio"></p>
+      </div>
+      
+      <!-- Flower Divider decoration -->
+      <div class="mt-8 mb-8 w-full mx-auto reveal-on-scroll floral-divider-wrap">
+        <img src="assets/floral_bouquet.png" alt="Divider" class="w-full h-auto floral-divider floral-divider">
+      </div>
+    </section>
+
+    <!-- SECTION 3: DETAIL ACARA -->
+    <section id="acara" class="relative z-10 px-6 py-10 max-w-[560px] mx-auto">
+      <div id="acara-section-title-wrap" class="reveal-on-scroll text-center mb-12">
+        <h2 id="acara-section-title" class="font-script text-primary text-5xl mb-4 wedding-section-title">Detail Acara</h2>
+        <p id="acara-section-subtitle" class="font-body text-sage-dark text-sm max-w-md mx-auto"></p>
+      </div>
+
+      <!-- Combined Akad Nikah & Resepsi Card -->
+      <div class="reveal-on-scroll">
+        <div class="wedding-card bg-white/80 border border-primary/20 backdrop-blur-md rounded-2xl p-6 shadow-sm text-center relative overflow-hidden">
+          <div class="absolute -top-12 -right-12 w-24 h-24 bg-primary/10 rounded-full"></div>
+          
+          <!-- Akad Nikah Section -->
+          <div id="akad-block" class="mb-4 flex flex-col items-center text-center">
+            <h3 id="akad-label" class="font-heading text-xl text-sage-dark mb-1 capitalize">Akad Nikah</h3>
+            <h4 class="font-heading text-base font-bold text-sage-dark mb-1 akad-venue"></h4>
+            <p class="font-body text-xs text-sage-dark leading-relaxed mb-2 max-w-sm mx-auto akad-address"></p>
+            <p class="font-heading text-base text-sage-dark akad-datetime text-center"></p>
+          </div>
+
+          <!-- Elegant Divider Line -->
+          <div id="acara-divider" class="w-20 h-px bg-primary/40 mx-auto my-4"></div>
+
+          <!-- Resepsi Section -->
+          <div id="resepsi-block" class="mb-5 flex flex-col items-center text-center">
+            <h3 id="resepsi-label" class="font-heading text-xl text-sage-dark mb-1 capitalize">Resepsi</h3>
+            <h4 class="font-heading text-base font-bold text-sage-dark mb-1 resepsi-venue"></h4>
+            <p class="font-body text-xs text-sage-dark leading-relaxed mb-2 max-w-sm mx-auto resepsi-address"></p>
+            <p class="font-heading text-base text-sage-dark resepsi-datetime text-center"></p>
+          </div>
+          
+          <!-- Combined Buttons (Applied to the whole event) -->
+          <div class="flex justify-center items-end gap-4 mt-8">
+            <!-- Add to Calendar -->
+            <a id="akad-calendar-btn" href="#" onclick="downloadCalendarEvent('akad'); return false;" target="_blank" class="btn-action w-24">
+              <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span id="calendar-btn-text">Kalender</span>
+            </a>
+            <!-- View on Maps -->
+            <a id="akad-map-btn" href="https://maps.google.com" target="_blank" class="btn-action w-24">
+              <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span id="maps-btn-text">Lihat Lokasi</span>
+            </a>
+          </div>
+          
+          <!-- Compact Maps Embed Preview -->
+          <div id="akad-maps-embed" class="mt-5 rounded-xl overflow-hidden border border-primary/20 hidden w-full" style="height: 150px; max-height: 150px;">
+            <!-- Maps embed will be injected by JS -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- Flower Divider decoration -->
+      <div class="mt-8 mb-8 w-full mx-auto reveal-on-scroll floral-divider-wrap">
+        <img src="assets/floral_bouquet.png" alt="Divider" class="w-full h-auto floral-divider floral-divider">
+      </div>
+    </section>
+
+    <!-- SECTION 4: CERITA KAMI (LOVE STORY) -->
+    <section id="love-story" class="relative z-10 px-6 pt-10 pb-10 max-w-2xl mx-auto">
+      <div class="reveal-on-scroll text-center mb-12">
+        <h2 class="font-script text-primary text-5xl mb-4 wedding-section-title">Cerita Kami</h2>
+      </div>
+
+      <div class="reveal-on-scroll">
+        <!-- Story Panel/Card Container -->
+        <div class="wedding-card bg-white/80 border border-primary/20 backdrop-blur-md rounded-2xl p-8 shadow-sm">
+          <!-- Active Slider Display -->
+          <div id="story-carousel-container" class="min-h-[140px] flex items-center justify-center">
+            <!-- Rendered by JS -->
+          </div>
+          
+          <!-- Slider Dot Navigation -->
+          <div id="story-dots" class="flex justify-center items-center gap-3 mt-6">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- Flower Divider decoration -->
+      <div class="mt-8 mb-8 w-full mx-auto reveal-on-scroll floral-divider-wrap">
+        <img src="assets/floral_bouquet.png" alt="Divider" class="w-full h-auto floral-divider floral-divider">
+      </div>
+    </section>
+
+    <!-- SECTION 5: TURUT MENGUNDANG -->
+    <section id="turut-mengundang" class="relative z-10 px-6 pt-10 pb-10 max-w-2xl mx-auto">
+      <div class="reveal-on-scroll text-center mb-12">
+        <h2 class="font-script text-primary text-5xl mb-4 wedding-section-title">Turut Mengundang</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start reveal-on-scroll">
+        <!-- Pihak Pria -->
+        <div class="wedding-card bg-white/80 border border-primary/20 backdrop-blur-md rounded-2xl p-6 shadow-sm">
+          <h3 class="font-heading text-lg font-bold text-emerald-800 border-b border-primary/20 pb-2 mb-4">Kel. Mempelai Pria</h3>
+          <ul id="turut-mengundang-groom" class="text-stone-600 text-sm space-y-2 font-body list-none">
+            <!-- Rendered by JS -->
+          </ul>
+        </div>
+        
+        <!-- Pihak Wanita -->
+        <div class="wedding-card bg-white/80 border border-primary/20 backdrop-blur-md rounded-2xl p-6 shadow-sm">
+          <h3 class="font-heading text-lg font-bold text-emerald-800 border-b border-primary/20 pb-2 mb-4">Kel. Mempelai Wanita</h3>
+          <ul id="turut-mengundang-bride" class="text-stone-600 text-sm space-y-2 font-body list-none">
+            <!-- Rendered by JS -->
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Flower Divider decoration -->
+      <div class="mt-8 mb-8 w-full mx-auto reveal-on-scroll floral-divider-wrap">
+        <img src="assets/floral_bouquet.png" alt="Divider" class="w-full h-auto floral-divider floral-divider">
+      </div>
+    </section>
+
+    <!-- SECTION 6: DOA & UCAPAN (GUEST BOOK) -->
+    <section id="ucapan" class="relative z-10 px-6 pt-10 pb-10 max-w-2xl mx-auto">
+      <div class="reveal-on-scroll text-center mb-12">
+        <h2 class="font-script text-primary text-5xl mb-4 wedding-section-title">Doa & Ucapan</h2>
+      </div>
+
+      <!-- Message Sender Form -->
+      <div class="reveal-on-scroll mb-12">
+        <div class="wedding-card bg-white/80 border border-primary/20 backdrop-blur-md rounded-2xl p-8 shadow-sm">
+          <form id="message-form" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-sage-muted tracking-wider uppercase mb-1.5 font-body">Nama</label>
+              <input type="text" id="message-name" class="form-input" placeholder="Masukkan nama Anda" required>
+            </div>
+            
+            <div>
+              <label class="block text-xs font-semibold text-sage-muted tracking-wider uppercase mb-1.5 font-body">Pesan untuk mempelai :</label>
+              <textarea id="message-text" rows="4" class="form-input resize-none" placeholder="Isi pesan anda" required></textarea>
+            </div>
+            <div class="flex flex-col gap-3 pt-2">
+              <button type="submit" class="btn-primary btn-pill text-xs uppercase font-bold w-full justify-center py-3">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                Kirim Pesan
+              </button>
+              
+              <button type="button" id="btn-kirim-kado" class="btn-primary btn-pill text-xs uppercase font-bold w-full justify-center py-3">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                Kirim Kado
+              </button>
+
+              <button type="button" id="btn-rsvp-modal" class="btn-primary btn-pill text-xs uppercase font-bold w-full justify-center py-3">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+                RSVP / Kehadiran
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Guest Comments Feed List -->
+      <div class="reveal-on-scroll">
+        <h3 class="font-heading text-2xl font-bold text-center text-amber-800 mb-6 uppercase tracking-wider">Dari Undangan</h3>
+        
+        <div id="comments-list-container" class="max-h-[500px] overflow-y-auto pr-2 space-y-4">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+      
+      <!-- Flower Divider decoration -->
+      <div class="mt-8 mb-8 w-full mx-auto reveal-on-scroll floral-divider-wrap">
+        <img src="assets/floral_bouquet.png" alt="Divider" class="w-full h-auto floral-divider floral-divider">
+      </div>
+    </section>
+
+    <!-- SECTION 7: CLOSING SALAM -->
+    <section class="closing-section pb-52 px-6 pt-16">
+      <div class="closing-card backdrop-blur-md rounded-[32px] shadow-xl border border-primary/20 px-8 py-10">
+        <h3 class="font-heading text-primary font-semibold tracking-widest uppercase">Terima Kasih</h3>
+        
+        <p class="text-sage-dark leading-relaxed font-body">
+          Atas doa dan ucapan Bapak/Ibu/Saudara/i, kami mengucapkan terima kasih.
+        </p>
+        
+        <div class="w-16 h-px bg-primary/30 mx-auto"></div>
+        
+        <p class="italic text-stone-500 font-body">Salam,</p>
+        
+        <h2 class="font-script text-primary leading-none"><span class="groom-nickname"></span> <span class="font-heading font-light text-3xl ampersand-symbol">&</span> <span class="bride-nickname"></span></h2>
+      </div>
+    </section>
+  </div>
+</main>
+
+  <!-- ================= FLOATING WIDGETS ================= -->
+  
+  <!-- Music play/pause button -->
+  <button id="music-toggle-btn" class="audio-player-btn" aria-label="Toggle background music">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+    </svg>
+  </button>
+
+  <!-- Navigation bottom bar (melayang) -->
+  <nav class="bottom-nav">
+    <a href="#mempelai" class="bottom-nav-item active">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+      </svg>
+      <span>Mempelai</span>
+    </a>
+    <a href="#acara" class="bottom-nav-item">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+      <span>Acara</span>
+    </a>
+    <a href="#love-story" class="bottom-nav-item">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      </svg>
+      <span>Story</span>
+    </a>
+    <a href="#ucapan" class="bottom-nav-item">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+      </svg>
+      <span>Ucapan</span>
+    </a>
+  </nav>
+
+  <!-- ================= MODALS OVERLAYS ================= -->
+  
+  <!-- Kado Modal -->
+  <div id="gift-modal" class="modal-overlay">
+    <div class="modal-content text-center">
+      <h3 class="font-heading text-2xl font-bold text-emerald-800 mb-2">Kado Digital</h3>
+      <p class="text-stone-500 text-xs font-body mb-6">Restu dan kehadiran Anda adalah kado terindah, namun jika Anda ingin mengirim kado digital silakan gunakan rekening di bawah ini:</p>
+      
+      <!-- Account list container -->
+      <div id="gift-modal-list" class="space-y-4 max-h-[300px] overflow-y-auto pr-1">
+        <!-- Rendered by JS -->
+      </div>
+      
+      <button id="gift-modal-close" class="mt-6 btn-primary bg-stone-700 hover:bg-stone-800 text-xs uppercase font-bold w-full justify-center">Tutup</button>
+    </div>
+  </div>
+  
+  <!-- RSVP Modal -->
+  <div id="rsvp-modal" class="modal-overlay">
+    <div class="modal-content">
+      <h3 class="font-heading text-2xl font-bold text-emerald-800 text-center mb-1">Konfirmasi Kehadiran</h3>
+      <p class="text-stone-500 text-xs text-center font-body mb-6">Harap konfirmasi kehadiran Anda sebelum tanggal acara.</p>
+      
+      <form id="rsvp-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-sage-muted tracking-wider uppercase mb-1.5 font-body">Nama Tamu</label>
+          <input type="text" id="rsvp-name" class="form-input" placeholder="Masukkan nama lengkap Anda" required>
+        </div>
+        
+        <div>
+          <label class="block text-xs font-semibold text-sage-muted tracking-wider uppercase mb-1.5 font-body">Status Kehadiran</label>
+          <div class="grid grid-cols-2 gap-4">
+            <label class="flex items-center gap-2 bg-stone-50 border border-stone-200 rounded-xl p-3 cursor-pointer hover:bg-stone-100 transition-all font-body text-sm text-stone-700">
+              <input type="radio" name="rsvp-attendance" value="hadir" checked class="accent-amber-600">
+              <span>Hadir</span>
+            </label>
+            <label class="flex items-center gap-2 bg-stone-50 border border-stone-200 rounded-xl p-3 cursor-pointer hover:bg-stone-100 transition-all font-body text-sm text-stone-700">
+              <input type="radio" name="rsvp-attendance" value="absen" class="accent-amber-600">
+              <span>Tidak Hadir</span>
+            </label>
+          </div>
+        </div>
+        
+        <div>
+          <label class="block text-xs font-semibold text-sage-muted tracking-wider uppercase mb-1.5 font-body">Jumlah Tamu</label>
+          <select id="rsvp-count" class="form-input">
+            <option value="1">1 Orang</option>
+            <option value="2">2 Orang</option>
+            <option value="3">3 Orang</option>
+            <option value="4">4 Orang</option>
+            <option value="5">5 Orang</option>
+          </select>
+        </div>
+        
+        <div>
+          <label class="block text-xs font-semibold text-sage-muted tracking-wider uppercase mb-1.5 font-body">Pesan Tambahan (Opsional)</label>
+          <textarea id="rsvp-notes" rows="3" class="form-input resize-none" placeholder="Tulis catatan atau salam untuk mempelai"></textarea>
+        </div>
+        
+        <div class="flex gap-4 pt-2">
+          <button type="button" id="rsvp-modal-close" class="btn-primary bg-stone-400 hover:bg-stone-500 text-xs uppercase font-bold flex-1 justify-center py-3">Batal</button>
+          <button type="submit" class="btn-primary text-xs uppercase font-bold flex-1 justify-center py-3">Kirim</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Embedded Config (Fallbacks/Overrides will be injected here during cms stand-alone downloads) -->
+  <script id="wedding-embedded-config" type="application/json">{}</script>
+
+  <script src="assets/themes.js"></script>
+  <script src="assets/analytics.js"></script>
+
+  <!-- JS Logic Core -->
+  <script src="assets/app.js"></script>
+</body>
+</html>
+
+
+
