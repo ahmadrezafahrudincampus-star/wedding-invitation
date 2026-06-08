@@ -778,8 +778,8 @@ function renderWeddingData() {
   document.querySelectorAll('.bride-fullname').forEach(el => el.textContent = "Siti Nuraeni");
   
   // Parents details
-  document.querySelectorAll('.groom-parents').forEach(el => el.textContent = "putra ke 5 alm. Bpk. Supandi dan almh. Ibu Hj. Sun'ah (Pramubakti, Jakarta)");
-  document.querySelectorAll('.bride-parents').forEach(el => el.textContent = "Putri Ke 6 Dari Bpk. Komarudin Dan Ibu Hanifah (Guru Mts Al Khoeriyah)");
+  document.querySelectorAll('.groom-parents').forEach(el => el.innerHTML = "putra ke 5 alm. Bpk. Supandi dan almh. Ibu Hj. Sun'ah<br>(Pramubakti, Jakarta)");
+  document.querySelectorAll('.bride-parents').forEach(el => el.innerHTML = "Putri Ke 6 Dari Bpk. Komarudin Dan Ibu Hanifah<br>(Guru Mts Al Khoeriyah)");
   
   // Bios & photos
   document.querySelectorAll('.groom-bio').forEach(el => el.textContent = c.subject_identity.groom.bio);
