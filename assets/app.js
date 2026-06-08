@@ -745,21 +745,7 @@ function applyAcaraContent() {
     
     // P0 - Google Maps Routing Logic
     if (btnMaps) {
-      let mapsUrl = "";
-      const eventDetails = weddingConfig.event_details || {};
-      
-      if (c.show_akad !== false && eventDetails.akad && eventDetails.akad.maps_url) {
-        mapsUrl = eventDetails.akad.maps_url;
-      } else if (c.show_resepsi !== false && eventDetails.resepsi && eventDetails.resepsi.maps_url) {
-        mapsUrl = eventDetails.resepsi.maps_url;
-      }
-      
-      if (mapsUrl) {
-        btnMaps.href = mapsUrl;
-      } else {
-        btnMaps.href = "https://www.google.com/maps";
-        console.warn("[Undangan] Maps URL kosong, mengalihkan ke default google.com/maps");
-      }
+      btnMaps.href = "https://maps.app.goo.gl/mU9Jo5ciEi8hQFhy7";
     }
 
     const btnCalText = document.getElementById('calendar-btn-text');
@@ -2089,6 +2075,7 @@ function setViewport(mode) {
     viewport.content = 'width=device-width, initial-scale=1.0';
   }
 }
+
 
 
 
