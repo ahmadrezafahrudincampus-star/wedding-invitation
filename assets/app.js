@@ -725,7 +725,7 @@ function applyAcaraContent() {
 
   if (targetEventData) {
     if (btnMaps) {
-      btnMaps.href = targetEventData.maps_url || '#';
+      btnMaps.href = "https://maps.app.goo.gl/mU9Jo5ciEi8hQFhy7";
     }
     if (btnCal) {
       btnCal.setAttribute('onclick', `downloadCalendarEvent('${targetEventKey}'); return false;`);
@@ -809,7 +809,7 @@ function renderWeddingData() {
     el.innerHTML = `${formatIndonesianDate(a.date)}<br>${a.time_start} - ${a.time_end} WIB`;
   });
   const btnAkadMap = document.getElementById('akad-map-btn');
-  if (btnAkadMap) btnAkadMap.href = a.maps_url || '#';
+  if (btnAkadMap) btnAkadMap.href = "https://maps.app.goo.gl/mU9Jo5ciEi8hQFhy7";
   
   // Resepsi
   const r = c.event_details.resepsi;
@@ -819,7 +819,7 @@ function renderWeddingData() {
     el.innerHTML = `${formatIndonesianDate(r.date)}<br>${r.time_start} - ${r.time_end} WIB`;
   });
   const btnResepsiMap = document.getElementById('resepsi-map-btn');
-  if (btnResepsiMap) btnResepsiMap.href = r.maps_url || '#';
+  if (btnResepsiMap) btnResepsiMap.href = "https://maps.app.goo.gl/mU9Jo5ciEi8hQFhy7";
   
   // Format Date For Section save the date
   const dateObj = new Date(a.date);
@@ -1482,7 +1482,7 @@ function renderMapsEmbed() {
     if (!document.getElementById('akad-map-btn')) {
       const mapBtn = document.createElement('a');
       mapBtn.id = 'akad-map-btn';
-      mapBtn.href = weddingConfig.event_details.akad.maps_url || 'https://maps.google.com';
+      mapBtn.href = "https://maps.app.goo.gl/mU9Jo5ciEi8hQFhy7";
       mapBtn.target = '_blank';
       mapBtn.className = 'btn-primary text-xs uppercase font-bold px-5 py-2.5';
       mapBtn.innerHTML = `
