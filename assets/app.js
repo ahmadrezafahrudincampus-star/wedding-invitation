@@ -788,12 +788,12 @@ function renderWeddingData() {
   // Update Cover Names & Nicknames
   document.querySelectorAll('.groom-nickname').forEach(el => el.textContent = c.subject_identity.groom.nickname);
   document.querySelectorAll('.bride-nickname').forEach(el => el.textContent = c.subject_identity.bride.nickname);
-  document.querySelectorAll('.groom-fullname').forEach(el => el.textContent = c.subject_identity.groom.full_name);
-  document.querySelectorAll('.bride-fullname').forEach(el => el.textContent = c.subject_identity.bride.full_name);
+  document.querySelectorAll('.groom-fullname').forEach(el => el.textContent = "Ahmad rodu");
+  document.querySelectorAll('.bride-fullname').forEach(el => el.textContent = "Siti Nuraeni");
   
   // Parents details
-  document.querySelectorAll('.groom-parents').forEach(el => el.textContent = `Putra dari ${c.subject_identity.groom.father_name} & ${c.subject_identity.groom.mother_name}`);
-  document.querySelectorAll('.bride-parents').forEach(el => el.textContent = `Putri dari ${c.subject_identity.bride.father_name} & ${c.subject_identity.bride.mother_name}`);
+  document.querySelectorAll('.groom-parents').forEach(el => el.textContent = "putra ke 5 alm. Bpk. Supandi dan almh. Ibu Hj. Sun'ah (Pramubakti, Jakarta)");
+  document.querySelectorAll('.bride-parents').forEach(el => el.textContent = "Putri Ke 6 Dari Bpk. Komarudin Dan Ibu Hanifah (Guru Mts Al Khoeriyah)");
   
   // Bios & photos
   document.querySelectorAll('.groom-bio').forEach(el => el.textContent = c.subject_identity.groom.bio);
