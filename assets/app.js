@@ -1930,7 +1930,7 @@ function setupCMSPreviewListenerV2() {
       applyDynamicFonts();
       applyOrnamentToggles();
       applyGuestGreetingTemplate();
-      renderMapsEmbed();
+      // renderMapsEmbed(); // Disabled to fix padding issue
       applyCoverAnimation();
 
       // Update background animation
@@ -2002,7 +2002,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupNavigation();
   loadMessages();
   setupCMSPreviewListenerV2();
-  renderMapsEmbed();
+  // renderMapsEmbed(); // Disabled to fix padding issue
   applyCoverAnimation();
   initTypographyAnimations();
   applyOrnamentToggles();
