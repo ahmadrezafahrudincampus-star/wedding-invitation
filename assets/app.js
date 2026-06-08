@@ -244,8 +244,8 @@ const DB = {
     // Fallback to LocalStorage
     let local = localStorage.getItem('wedding_messages');
     return local ? JSON.parse(local) : [
-      { id: "1", name: "Elizabeth Bennet dan Darcy", message: "Sejatinya pernikahan adalah lembaran baru kehidupan, kebahagiaan, kebersamaan, dan hal-hal baik lainnya yang menyertai.", created_at: new Date(Date.now() - 3600000).toISOString() },
-      { id: "2", name: "Edward & Bella", message: "Mantap!! Selamat berbahagia menjalani bahtera rumah tangga yang baru.", created_at: new Date(Date.now() - 7200000).toISOString() }
+      { id: "1", name: "Budi & Siti", message: "Sejatinya pernikahan adalah lembaran baru kehidupan, kebahagiaan, kebersamaan, dan hal-hal baik lainnya yang menyertai.", created_at: new Date(Date.now() - 3600000).toISOString() },
+      { id: "2", name: "Andi & Susi", message: "Mantap!! Selamat berbahagia menjalani bahtera rumah tangga yang baru.", created_at: new Date(Date.now() - 7200000).toISOString() }
     ];
   },
   
@@ -276,8 +276,8 @@ const DB = {
     // Fallback to LocalStorage
     let local = localStorage.getItem('wedding_messages');
     let messages = local ? JSON.parse(local) : [
-      { id: "1", name: "Elizabeth Bennet dan Darcy", message: "Sejatinya pernikahan adalah lembaran baru kehidupan, kebahagiaan, kebersamaan, dan hal-hal baik lainnya yang menyertai.", created_at: new Date(Date.now() - 3600000).toISOString() },
-      { id: "2", name: "Edward & Bella", message: "Mantap!! Selamat berbahagia menjalani bahtera rumah tangga yang baru.", created_at: new Date(Date.now() - 7200000).toISOString() }
+      { id: "1", name: "Budi & Siti", message: "Sejatinya pernikahan adalah lembaran baru kehidupan, kebahagiaan, kebersamaan, dan hal-hal baik lainnya yang menyertai.", created_at: new Date(Date.now() - 3600000).toISOString() },
+      { id: "2", name: "Andi & Susi", message: "Mantap!! Selamat berbahagia menjalani bahtera rumah tangga yang baru.", created_at: new Date(Date.now() - 7200000).toISOString() }
     ];
     messages.unshift(newMessage);
     localStorage.setItem('wedding_messages', JSON.stringify(messages));
@@ -2089,6 +2089,7 @@ function setViewport(mode) {
     viewport.content = 'width=device-width, initial-scale=1.0';
   }
 }
+
 
 
 
