@@ -916,11 +916,28 @@ function renderTurutMengundang() {
   const bList = document.getElementById('turut-mengundang-bride');
   if (!gList || !bList) return;
   
-  const groomFamily = weddingConfig.turut_mengundang.groom_family || [];
-  gList.innerHTML = groomFamily.map(name => `<li>${name}</li>`).join('');
+  const groomFamilyHtml = `
+    <li>Kyai Abdullah Am (Tokoh Agama) - Kp. Temanggungan</li>
+    <li>Kel. Besar Alm. H. Tobri</li>
+    <li>Kel. Besar Alm. Yamin</li>
+    <li>Kel. Besar Pp Raudlatussyafi'iyyah</li>
+    <li>Pemuda/i Kp. Temanggungan</li>
+  `;
+  gList.innerHTML = groomFamilyHtml;
   
-  const brideFamily = weddingConfig.turut_mengundang.bride_family || [];
-  bList.innerHTML = brideFamily.map(name => `<li>${name}</li>`).join('');
+  const brideFamilyHtml = `
+    <li>Bpk. H. Abdillah Alawi Kepala Desa - Gobang</li>
+    <li>Bpk. Firmansyah Sekdes - Gobang</li>
+    <li>Bpk. Wawan (Ketua RW 04)</li>
+    <li>Ketua RT. 06, 07, 08</li>
+    <li>Ust. Piyan (Tokoh Agama) - Kp. Bedeng</li>
+    <li>Kel. Besar MWCNu Kecamatan Rumpin</li>
+    <li>Pac IPNU &amp; IPPNU Kecamatan Rumpin</li>
+    <li>Segenap Dewan Guru Mts Al - Khoeriyah</li>
+    <li>Pemuda/i Kp. Bedeng</li>
+    <li>Putra/i Diniyah Al - Mujahiddin</li>
+  `;
+  bList.innerHTML = brideFamilyHtml;
 }
 
 // Render Bank Accounts & QR Codes in Modal
