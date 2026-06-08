@@ -744,9 +744,7 @@ function applyAcaraContent() {
     if (btnMapsText) btnMapsText.textContent = c.maps_button_text !== undefined ? c.maps_button_text : "Lihat Lokasi";
     
     // P0 - Google Maps Routing Logic
-    if (btnMaps) {
-      btnMaps.href = "https://maps.app.goo.gl/mU9Jo5ciEi8hQFhy7";
-    }
+    // Maps link is now hardcoded directly in index.html
 
     const btnCalText = document.getElementById('calendar-btn-text');
     if (btnCal) btnCal.style.display = c.calendar_button_visible === false ? 'none' : '';
